@@ -1,0 +1,153 @@
+{
+    "name": "PlayerActions",
+    "maps": [
+        {
+            "name": "Player Input",
+            "id": "2fa7c70f-06e6-4749-9aad-6144b8a0ea88",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Button",
+                    "id": "43dd1be6-9018-4c44-ba1b-0164c2162e1f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.1)"
+                },
+                {
+                    "name": "Sprint",
+                    "type": "Button",
+                    "id": "366e5ba4-ec9f-4f90-9965-21ab8d875849",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.1)"
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "46906412-4138-41a5-acca-de4af49e2120",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "WallRun",
+                    "type": "Button",
+                    "id": "5b8452f1-90ce-4cb6-8e6f-b75eefcefb52",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.1)"
+                },
+                {
+                    "name": "Crouch/Slide",
+                    "type": "Button",
+                    "id": "3ba404bb-3d73-4668-995f-3a359ab35913",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.1)"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "WASD",
+                    "id": "c96a44e3-b405-49cc-9f6a-d134e1828980",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "6537b1d5-238b-435f-8eec-0f0b20b2ac41",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "47cd7228-abb9-4f73-b491-e5ed4f23fa5f",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "bb92f57b-72f0-46b9-bef2-f4cd57117932",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "77e87f78-b6e2-4340-83d9-1af091e2df6e",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7fe05edd-5580-48cc-8454-e67d38d2223e",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ff6cbb56-66ed-4efc-9146-5c6690288b7c",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "506378e8-2d80-4a66-8e70-6430d17b7bd6",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallRun",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f39d4772-8465-4aac-970a-cec4b8017fe0",
+                    "path": "<Keyboard>/c",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Crouch/Slide",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
