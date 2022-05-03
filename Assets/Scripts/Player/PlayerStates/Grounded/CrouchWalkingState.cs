@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrouchingState : GroundedState
+public class CrouchWalkingState : GroundedState
 {
+    public CrouchWalkingState(Player player) : base(player) { }
+
     public override void OnEnter()
     {
         base.OnEnter();

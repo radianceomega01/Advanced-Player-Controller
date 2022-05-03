@@ -1,6 +1,8 @@
 
 public class LaunchingState : InAirState
 {
+    public LaunchingState(Player player) : base(player) { }
+
     public override void OnEnter()
     {
 

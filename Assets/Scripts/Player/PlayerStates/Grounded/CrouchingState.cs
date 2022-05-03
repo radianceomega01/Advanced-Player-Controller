@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlidingState : GroundedState
+public class CrouchingState : GroundedState
 {
+    public CrouchingState(Player player) : base(player) { }
+
     public override void OnEnter()
     {
         base.OnEnter();
