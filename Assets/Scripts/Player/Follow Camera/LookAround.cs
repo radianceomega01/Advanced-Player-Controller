@@ -31,9 +31,9 @@ public class LookAround : MonoBehaviour
         cameraTarget.Rotate(Vector3.up * Time.deltaTime * rotationSpeedX * -moveDelta.x);
         cameraTarget.Rotate(Vector3.right * Time.deltaTime * rotationSpeedY * moveDelta.y);
 
-        /*player.transform.rotation = Quaternion.Slerp(player.transform.rotation,
+        player.transform.rotation = Quaternion.Slerp(player.transform.rotation,
             Quaternion.Euler(player.transform.rotation.eulerAngles.x, cameraTarget.rotation.eulerAngles.y, player.transform.rotation.eulerAngles.z)
-            , interpolant);*/
+            , interpolant);
         interpolant += Time.deltaTime * turnSpeed;
     }
 }

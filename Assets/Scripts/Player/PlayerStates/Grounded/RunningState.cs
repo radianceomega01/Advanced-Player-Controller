@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class RunningState : GroundedState
 {
-    Vector2 movement;
+    Vector2 moveInput;
     float pressTime;
     float runningSpeed = 250f;
+
+    Vector3 playerForwardDir;
+    Vector3 playerRightDir;
+
+    Vector3 movementDir;
 
     public RunningState(Player player) : base(player) { }
 
@@ -19,16 +24,26 @@ public class RunningState : GroundedState
 
     public override void PhysicsProcess()
     {
-        player.GetRigidBody().velocity = new Vector3(player.transform.forward.x * movement.x, 0f, player.transform.forward.z * movement.y)
-            * runningSpeed * Time.fixedDeltaTime;
+        
+        player.GetRigidBody().velocity = movementDir * runningSpeed * Time.fixedDeltaTime;
     }
 
     public override void Process()
     {
-        movement = playerActions.PlayerInput.Move.ReadValue<Vector2>();
+        moveInput = playerActions.PlayerInput.Move.ReadValue<Vector2>();
         pressTime = playerActions.PlayerInput.Sprint.ReadValue<float>();
 
-        if (movement.magnitude == 0f)
+        playerRightDir = player.transform.right;
+        playerRightDir.y = 0;
+        playerRightDir.Normalize();
+
+        playerForwardDir = player.transform.forward;
+        playerForwardDir.y = 0;
+        playerForwardDir.Normalize();
+
+        movementDir = playerRightDir * moveInput.x + playerForwardDir * moveInput.y;
+
+        if (moveInput.magnitude == 0f)
             player.SetState(StateFactory.GetIdleState(player));
         if (pressTime <= 0.1f)
             player.SetState(StateFactory.GetWalkingState(player));

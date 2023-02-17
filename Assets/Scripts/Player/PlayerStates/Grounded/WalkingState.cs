@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class WalkingState : GroundedState
 {
-    Vector2 movement;
+    Vector2 moveInput;
     float pressTime;
     float walkingSpeed = 100f;
 
+    Vector3 playerForwardDir;
+    Vector3 playerRightDir;
+
+    Vector3 movementDir;
     public WalkingState(Player player) : base(player) { }
 
     public override void OnEnter()
@@ -18,7 +22,7 @@ public class WalkingState : GroundedState
 
         playerActions.PlayerInput.Sprint.performed += _ =>
         {
-            if (movement.x == 0 && movement.y == 1)
+            if (moveInput.x == 0 && moveInput.y == 1)
             {
                 player.SetState(StateFactory.GetRunningState(player));
             }
@@ -28,18 +32,28 @@ public class WalkingState : GroundedState
 
     public override void PhysicsProcess()
     {
-        player.GetRigidBody().velocity = new Vector3(movement.x, 0f, movement.y) * walkingSpeed * Time.fixedDeltaTime;
+        player.GetRigidBody().velocity = movementDir * walkingSpeed * Time.fixedDeltaTime;
     }
 
     public override void Process()
     {
-        movement = playerActions.PlayerInput.Move.ReadValue<Vector2>();
+        moveInput = playerActions.PlayerInput.Move.ReadValue<Vector2>();
         pressTime = playerActions.PlayerInput.Sprint.ReadValue<float>();
 
-        player.SetAnimation("InpX", movement.x);
-        player.SetAnimation("InpY", movement.y);
+        player.SetAnimation("InpX", moveInput.x);
+        player.SetAnimation("InpY", moveInput.y);
 
-        if (movement.magnitude == 0f)
+        playerRightDir = player.transform.right;
+        playerRightDir.y = 0;
+        playerRightDir.Normalize();
+
+        playerForwardDir = player.transform.forward;
+        playerForwardDir.y = 0;
+        playerForwardDir.Normalize();
+
+        movementDir = playerRightDir * moveInput.x + playerForwardDir * moveInput.y;
+
+        if (moveInput.magnitude == 0f)
             player.SetState(StateFactory.GetIdleState(player));
     }
 }
