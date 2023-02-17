@@ -2,16 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FallingState : MonoBehaviour
+public class FallingState : GroundedState
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public FallingState(Player player) : base(player) { }
+
+    public override void OnEnter()
+    {
+        base.OnEnter();
+    }
+
+    public override void PhysicsProcess()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Process()
     {
         
     }

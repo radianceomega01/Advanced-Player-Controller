@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Player Input/PlayerActions.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Player/Player Input/PlayerActions.inputactions'
 
 using System;
 using System.Collections;
@@ -18,6 +18,14 @@ public class @PlayerActions : IInputActionCollection, IDisposable
             ""name"": ""Player Input"",
             ""id"": ""2fa7c70f-06e6-4749-9aad-6144b8a0ea88"",
             ""actions"": [
+                {
+                    ""name"": ""Look Around"",
+                    ""type"": ""Value"",
+                    ""id"": ""a518a94f-6f69-4776-b620-808d9165a363"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.1)""
+                },
                 {
                     ""name"": ""Move"",
                     ""type"": ""Button"",
@@ -158,14 +166,32 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""action"": ""Crouch/Slide"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4d55ba7d-4bea-46ea-acd0-ff2cb77e7690"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Look Around"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""Keyboard"",
+            ""bindingGroup"": ""Keyboard"",
+            ""devices"": []
+        }
+    ]
 }");
         // Player Input
         m_PlayerInput = asset.FindActionMap("Player Input", throwIfNotFound: true);
+        m_PlayerInput_LookAround = m_PlayerInput.FindAction("Look Around", throwIfNotFound: true);
         m_PlayerInput_Move = m_PlayerInput.FindAction("Move", throwIfNotFound: true);
         m_PlayerInput_Sprint = m_PlayerInput.FindAction("Sprint", throwIfNotFound: true);
         m_PlayerInput_Jump = m_PlayerInput.FindAction("Jump", throwIfNotFound: true);
@@ -220,6 +246,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     // Player Input
     private readonly InputActionMap m_PlayerInput;
     private IPlayerInputActions m_PlayerInputActionsCallbackInterface;
+    private readonly InputAction m_PlayerInput_LookAround;
     private readonly InputAction m_PlayerInput_Move;
     private readonly InputAction m_PlayerInput_Sprint;
     private readonly InputAction m_PlayerInput_Jump;
@@ -229,6 +256,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     {
         private @PlayerActions m_Wrapper;
         public PlayerInputActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @LookAround => m_Wrapper.m_PlayerInput_LookAround;
         public InputAction @Move => m_Wrapper.m_PlayerInput_Move;
         public InputAction @Sprint => m_Wrapper.m_PlayerInput_Sprint;
         public InputAction @Jump => m_Wrapper.m_PlayerInput_Jump;
@@ -243,6 +271,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_PlayerInputActionsCallbackInterface != null)
             {
+                @LookAround.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnLookAround;
+                @LookAround.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnLookAround;
+                @LookAround.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnLookAround;
                 @Move.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnMove;
@@ -262,6 +293,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
             m_Wrapper.m_PlayerInputActionsCallbackInterface = instance;
             if (instance != null)
             {
+                @LookAround.started += instance.OnLookAround;
+                @LookAround.performed += instance.OnLookAround;
+                @LookAround.canceled += instance.OnLookAround;
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
@@ -281,8 +315,18 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         }
     }
     public PlayerInputActions @PlayerInput => new PlayerInputActions(this);
+    private int m_KeyboardSchemeIndex = -1;
+    public InputControlScheme KeyboardScheme
+    {
+        get
+        {
+            if (m_KeyboardSchemeIndex == -1) m_KeyboardSchemeIndex = asset.FindControlSchemeIndex("Keyboard");
+            return asset.controlSchemes[m_KeyboardSchemeIndex];
+        }
+    }
     public interface IPlayerInputActions
     {
+        void OnLookAround(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);

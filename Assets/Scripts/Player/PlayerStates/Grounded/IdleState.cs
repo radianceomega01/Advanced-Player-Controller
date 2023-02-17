@@ -10,8 +10,10 @@ public class IdleState : GroundedState
     {
         base.OnEnter();
 
-        playerActions.PlayerInput.Move.performed += _ => player.ChangeState(new WalkingState(player));
-        playerActions.PlayerInput.CrouchSlide.performed += _ => player.ChangeState(new CrouchingState(player));
+        player.SetAnimation("Idle");
+
+        playerActions.PlayerInput.Move.performed += _ => player.SetState(StateFactory.GetWalkingState(player));
+        playerActions.PlayerInput.CrouchSlide.performed += _ => player.SetState(StateFactory.GetCrouchingState(player));
 
     }
 

@@ -6,6 +6,14 @@
             "id": "2fa7c70f-06e6-4749-9aad-6144b8a0ea88",
             "actions": [
                 {
+                    "name": "Look Around",
+                    "type": "Value",
+                    "id": "a518a94f-6f69-4776-b620-808d9165a363",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.1)"
+                },
+                {
                     "name": "Move",
                     "type": "Button",
                     "id": "43dd1be6-9018-4c44-ba1b-0164c2162e1f",
@@ -145,9 +153,26 @@
                     "action": "Crouch/Slide",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4d55ba7d-4bea-46ea-acd0-ff2cb77e7690",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Look Around",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": []
+        }
+    ]
 }

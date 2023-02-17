@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        ChangeState(new IdleState(this));
+        SetState(new IdleState(this));
     }
     private void FixedUpdate()
     {
@@ -35,16 +35,15 @@ public class Player : MonoBehaviour
         state.Process();
     }
 
-    public void ChangeState(PlayerState state)
+    public void SetState(PlayerState state)
     {
         this.state = state;
         state.OnEnter();
     }
 
-    public void SetAnimation()
-    {
-
-    }
+    public void SetAnimation(string name) =>animator.SetTrigger(name);
+    public void SetAnimation(string name, bool value) =>animator.SetBool(name, value);
+    public void SetAnimation(string name, float value) =>animator.SetFloat(name, value);
 
     public PlayerActions GetPlayerActions() => playerActions;
 

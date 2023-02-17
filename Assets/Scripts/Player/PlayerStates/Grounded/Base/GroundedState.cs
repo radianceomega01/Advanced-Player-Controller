@@ -5,6 +5,6 @@ public abstract class GroundedState : PlayerState
 
     public override void OnEnter()
     {
-        playerActions.PlayerInput.Jump.performed += _ => player.ChangeState(new LaunchingState(player));
+        playerActions.PlayerInput.Jump.performed += _ => player.SetState(new JumpedState(player));
     }
 }
