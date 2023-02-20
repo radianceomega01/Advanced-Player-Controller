@@ -4,14 +4,7 @@ using UnityEngine;
 
 public class WalkingState : GroundedState
 {
-    Vector2 moveInput;
-    float pressTime;
     float walkingSpeed = 100f;
-
-    Vector3 playerForwardDir;
-    Vector3 playerRightDir;
-
-    Vector3 movementDir;
     public WalkingState(Player player) : base(player) { }
 
     public override void OnEnter()
@@ -37,21 +30,7 @@ public class WalkingState : GroundedState
 
     public override void Process()
     {
-        moveInput = playerActions.PlayerInput.Move.ReadValue<Vector2>();
-        pressTime = playerActions.PlayerInput.Sprint.ReadValue<float>();
-
-        player.SetAnimation("InpX", moveInput.x);
-        player.SetAnimation("InpY", moveInput.y);
-
-        playerRightDir = player.transform.right;
-        playerRightDir.y = 0;
-        playerRightDir.Normalize();
-
-        playerForwardDir = player.transform.forward;
-        playerForwardDir.y = 0;
-        playerForwardDir.Normalize();
-
-        movementDir = playerRightDir * moveInput.x + playerForwardDir * moveInput.y;
+        base.Process();
 
         if (moveInput.magnitude == 0f)
             player.SetState(StateFactory.GetIdleState(player));
