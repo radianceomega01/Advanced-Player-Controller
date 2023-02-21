@@ -17,7 +17,8 @@ public class RunningState : GroundedState
 
     public override void PhysicsProcess()
     {
-        
+        base.PhysicsProcess();
+
         player.GetRigidBody().velocity = movementDir * runningSpeed * Time.fixedDeltaTime;
     }
 

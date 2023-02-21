@@ -5,6 +5,8 @@ public abstract class GroundedState : PlayerState
 {
     Vector3 playerForwardDir;
     Vector3 playerRightDir;
+    LayerMask layerMask;
+    Collider[] colliders;
 
     protected float pressTime;
     protected Vector2 moveInput;
@@ -15,6 +17,16 @@ public abstract class GroundedState : PlayerState
     public override void OnEnter()
     {
         playerActions.PlayerInput.Jump.performed += _ => player.SetState(new JumpedState(player));
+        layerMask = 1 << 3;
+    }
+
+    public override void PhysicsProcess()
+    {
+        colliders =  Physics.OverlapSphere(player.GetFootPos(), 0.1f, layerMask);
+        if (colliders.Length == 0)
+        {
+            player.SetState(StateFactory.GetFallingState(player)); 
+        }
     }
 
     public override void Process()

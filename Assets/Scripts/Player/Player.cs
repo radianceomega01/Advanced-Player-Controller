@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] Transform footPos;
+
     PlayerActions playerActions;
     PlayerState state;
+    PlayerState previousState;
     Animator animator;
     Rigidbody rigidBody;
 
@@ -37,15 +40,21 @@ public class Player : MonoBehaviour
 
     public void SetState(PlayerState state)
     {
+        previousState = this.state;
         this.state = state;
         state.OnEnter();
     }
 
+    public PlayerState GetPreviousState() => previousState;
+
     public void SetAnimation(string name) =>animator.SetTrigger(name);
+    public void ResetAnimation(string name) => animator.ResetTrigger(name);
     public void SetAnimation(string name, bool value) =>animator.SetBool(name, value);
     public void SetAnimation(string name, float value) =>animator.SetFloat(name, value);
 
     public PlayerActions GetPlayerActions() => playerActions;
+
+    public Vector3 GetFootPos() => footPos.position;
 
     public Rigidbody GetRigidBody() => rigidBody;
 
