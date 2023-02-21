@@ -874,6 +874,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1146960719352198886, guid: 31fa3f4d237539348a534d408b01dd2f, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5695169098685636376, guid: 31fa3f4d237539348a534d408b01dd2f, type: 3}
       propertyPath: m_Enabled
       value: 1
