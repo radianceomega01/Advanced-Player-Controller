@@ -38,10 +38,11 @@ public class Player : MonoBehaviour
         state.Process();
     }
 
-    public void SetState(PlayerState state)
+    public void SetState(PlayerState newState)
     {
-        previousState = this.state;
-        this.state = state;
+        previousState = state;
+        state?.OnExit();
+        state = newState;
         state.OnEnter();
     }
 

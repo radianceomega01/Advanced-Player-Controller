@@ -1,33 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class FallingState : GroundedState
+public class FallingState : InAirState
 {
-    LayerMask layerMask;
-    Collider[] colliders;
-
     public FallingState(Player player) : base(player) { }
 
     public override void OnEnter()
     {
         base.OnEnter();
-        layerMask = 1 << 3;
-        player.SetAnimation("Fall");
+        if(player.GetPreviousState().GetType().IsSubclassOf(typeof(GroundedState)))
+            player.SetAnimation("Fall");
     }
 
     public override void PhysicsProcess()
     {
-        colliders = Physics.OverlapSphere(player.GetFootPos(), 0.1f, layerMask);
-        if (colliders.Length > 0)
-        {
-            player.SetState(StateFactory.GetIdleState(player));
-        }
-            
+        base.PhysicsProcess();
     }
 
     public override void Process()
     {
-        
+        base.Process();
+    }
+
+    public override void OnExit()
+    {
+        base.OnExit();
+        player.ResetAnimation("Fall");
     }
 }

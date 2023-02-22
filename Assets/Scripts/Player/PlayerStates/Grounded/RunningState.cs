@@ -31,4 +31,9 @@ public class RunningState : GroundedState
         if (pressTime <= 0.1f)
             player.SetState(StateFactory.GetWalkingState(player));
     }
+
+    public override void OnExit()
+    {
+        base.OnExit();
+    }
 }

@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class GroundedState : PlayerState
 {
@@ -16,8 +17,18 @@ public abstract class GroundedState : PlayerState
 
     public override void OnEnter()
     {
-        playerActions.PlayerInput.Jump.performed += _ => player.SetState(new JumpedState(player));
+        playerActions.PlayerInput.Jump.performed += SwitchToJumpingState;
         layerMask = 1 << 3;
+
+        if (player.GetPreviousState() == StateFactory.GetFallingState(player))
+        {
+            if(InAirState.jumpCount == 1)
+                player.SetAnimation("Land");
+            else
+                player.SetAnimation("DLand");
+
+            InAirState.jumpCount = 0;
+        }
     }
 
     public override void PhysicsProcess()
@@ -46,5 +57,17 @@ public abstract class GroundedState : PlayerState
         playerForwardDir.Normalize();
 
         movementDir = (playerRightDir * moveInput.x + playerForwardDir * moveInput.y).normalized;
+    }
+
+    public override void OnExit()
+    {
+        player.ResetAnimation("Land");
+        player.ResetAnimation("DLand");
+        playerActions.PlayerInput.Jump.performed -= SwitchToJumpingState;
+    }
+
+    private void SwitchToJumpingState(InputAction.CallbackContext ctx)
+    {
+        player.SetState(new JumpedState(player));
     }
 }
