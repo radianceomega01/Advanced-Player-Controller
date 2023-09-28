@@ -30,7 +30,7 @@ public class IdleState : GroundedState
         base.Process();
         if (moveInput.magnitude != 0f)
         {
-            player.SetState(StateFactory.GetWalkingState(player));
+            player.SetState(StateFactory.GetPlayerState(typeof(WalkingState), player));
         }
             
     }
@@ -47,12 +47,12 @@ public class IdleState : GroundedState
     {
         if (moveInput.x == 0 && moveInput.y == 1)
         {
-            player.SetState(StateFactory.GetRunningState(player));
+            player.SetState(StateFactory.GetPlayerState(typeof(RunningState), player));
         }
     }
 
     private void SwitchToCrouchingState(InputAction.CallbackContext ctx)
     {
-        player.SetState(StateFactory.GetCrouchingState(player));
+        player.SetState(StateFactory.GetPlayerState(typeof(CrouchingState), player));
     }
 }

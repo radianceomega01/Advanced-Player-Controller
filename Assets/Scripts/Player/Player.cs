@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class Player : MonoBehaviour
     PlayerState previousState;
     Animator animator;
     Rigidbody rigidBody;
+
+    public event Action OnAnimComplete;
 
     void Awake()
     {
@@ -26,7 +29,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        SetState(new IdleState(this));
+        SetState(StateFactory.GetPlayerState(typeof(IdleState), this));
     }
     private void FixedUpdate()
     {
@@ -41,7 +44,8 @@ public class Player : MonoBehaviour
     public void SetState(PlayerState newState)
     {
         previousState = state;
-        state?.OnExit();
+        if(state != null)
+            state.OnExit();
         state = newState;
         state.OnEnter();
     }
@@ -52,6 +56,8 @@ public class Player : MonoBehaviour
     public void ResetAnimation(string name) => animator.ResetTrigger(name);
     public void SetAnimation(string name, bool value) =>animator.SetBool(name, value);
     public void SetAnimation(string name, float value) =>animator.SetFloat(name, value);
+
+    public void AnimCompete() => OnAnimComplete?.Invoke();
 
     public PlayerActions GetPlayerActions() => playerActions;
 

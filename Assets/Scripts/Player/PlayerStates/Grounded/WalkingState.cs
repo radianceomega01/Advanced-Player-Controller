@@ -15,7 +15,7 @@ public class WalkingState : GroundedState
         player.SetAnimation("Walk");
 
         playerActions.PlayerInput.Sprint.performed += SwitchToRunningState;
-        playerActions.PlayerInput.CrouchSlide.performed += SwitchToCrouchingState;
+        playerActions.PlayerInput.CrouchSlide.performed += SwitchToSlidingState;
     }
 
     public override void PhysicsProcess()
@@ -30,26 +30,21 @@ public class WalkingState : GroundedState
         base.Process();
 
         if (moveInput.magnitude == 0f)
-            player.SetState(StateFactory.GetIdleState(player));
+            player.SetState(StateFactory.GetPlayerState(typeof(IdleState), player));
     }
 
     public override void OnExit()
     {
         base.OnExit();
         playerActions.PlayerInput.Sprint.performed -= SwitchToRunningState;
-        playerActions.PlayerInput.CrouchSlide.performed -= SwitchToCrouchingState;
+        playerActions.PlayerInput.CrouchSlide.performed -= SwitchToSlidingState;
     }
 
     private void SwitchToRunningState(InputAction.CallbackContext ctx)
     {
         if (moveInput.x == 0 && moveInput.y == 1)
         {
-            player.SetState(StateFactory.GetRunningState(player));
+            player.SetState(StateFactory.GetPlayerState(typeof(RunningState), player));
         }
-    }
-
-    private void SwitchToCrouchingState(InputAction.CallbackContext ctx)
-    {
-        player.SetState(StateFactory.GetCrouchingState(player));
     }
 }

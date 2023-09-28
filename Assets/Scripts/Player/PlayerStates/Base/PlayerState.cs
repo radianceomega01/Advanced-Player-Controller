@@ -10,7 +10,9 @@ public abstract class PlayerState
     }
 
     public abstract void OnEnter();
-    public abstract void Process();
     public abstract void PhysicsProcess();
+
+    //public abstract void OnAnimComplete();
+    public abstract void Process();
     public abstract void OnExit();
 }

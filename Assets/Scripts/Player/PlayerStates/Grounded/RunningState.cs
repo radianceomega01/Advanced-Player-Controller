@@ -11,7 +11,8 @@ public class RunningState : GroundedState
     public override void OnEnter()
     {
         base.OnEnter();
-
+        Debug.Log("Running state");
+        playerActions.PlayerInput.CrouchSlide.performed += SwitchToSlidingState;
         player.SetAnimation("Run");
     }
 
@@ -27,13 +28,15 @@ public class RunningState : GroundedState
         base.Process();
 
         if (moveInput.magnitude == 0f)
-            player.SetState(StateFactory.GetIdleState(player));
+            player.SetState(StateFactory.GetPlayerState(typeof(IdleState), player));
         if (pressTime <= 0.1f)
-            player.SetState(StateFactory.GetWalkingState(player));
+            player.SetState(StateFactory.GetPlayerState(typeof(WalkingState), player));
     }
 
     public override void OnExit()
     {
         base.OnExit();
+        playerActions.PlayerInput.CrouchSlide.performed -= SwitchToSlidingState;
     }
+
 }

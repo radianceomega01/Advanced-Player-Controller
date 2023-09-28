@@ -20,7 +20,7 @@ public abstract class GroundedState : PlayerState
         playerActions.PlayerInput.Jump.performed += SwitchToJumpingState;
         layerMask = 1 << 3;
 
-        if (player.GetPreviousState() == StateFactory.GetFallingState(player))
+        if (player.GetPreviousState() == StateFactory.GetPlayerState(typeof(FallingState), player))
         {
             if(InAirState.jumpCount == 1)
                 player.SetAnimation("Land");
@@ -36,7 +36,7 @@ public abstract class GroundedState : PlayerState
         colliders =  Physics.OverlapSphere(player.GetFootPos(), 0.1f, layerMask);
         if (colliders.Length == 0)
         {
-            player.SetState(StateFactory.GetFallingState(player)); 
+            player.SetState(StateFactory.GetPlayerState(typeof(FallingState), player)); 
         }
     }
 
@@ -68,6 +68,11 @@ public abstract class GroundedState : PlayerState
 
     private void SwitchToJumpingState(InputAction.CallbackContext ctx)
     {
-        player.SetState(new JumpedState(player));
+        player.SetState(StateFactory.GetPlayerState(typeof(JumpedState), player));
+    }
+
+    protected void SwitchToSlidingState(InputAction.CallbackContext ctx)
+    {
+        player.SetState(StateFactory.GetPlayerState(typeof(SlidingState), player));
     }
 }
