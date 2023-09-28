@@ -12,15 +12,9 @@ public abstract class InAirState : PlayerState
         playerActions.PlayerInput.Jump.performed += SwitchToJumpingState;
     }
 
-    public override void PhysicsProcess()
-    {
-        
-    }
+    public override void PhysicsProcess() { }
 
-    public override void Process()
-    {
-        
-    }
+    public override void Process() { }
 
     public override void OnExit()
     {

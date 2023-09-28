@@ -38,7 +38,6 @@ public class IdleState : GroundedState
     public override void OnExit()
     {
         base.OnExit();
-        player.ResetAnimation("Idle");
         playerActions.PlayerInput.Sprint.performed -= SwitchToRunningState;
         playerActions.PlayerInput.CrouchSlide.performed -= SwitchToCrouchingState;
     }

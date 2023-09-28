@@ -12,7 +12,7 @@ public class WalkingState : GroundedState
     {
         base.OnEnter();
 
-        player.SetAnimation("Walk");
+        player.SetAnimation("Walking");
 
         playerActions.PlayerInput.Sprint.performed += SwitchToRunningState;
         playerActions.PlayerInput.CrouchSlide.performed += SwitchToSlidingState;

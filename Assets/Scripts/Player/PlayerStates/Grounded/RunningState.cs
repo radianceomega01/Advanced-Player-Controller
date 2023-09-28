@@ -11,9 +11,8 @@ public class RunningState : GroundedState
     public override void OnEnter()
     {
         base.OnEnter();
-        Debug.Log("Running state");
         playerActions.PlayerInput.CrouchSlide.performed += SwitchToSlidingState;
-        player.SetAnimation("Run");
+        player.SetAnimation("Running");
     }
 
     public override void PhysicsProcess()

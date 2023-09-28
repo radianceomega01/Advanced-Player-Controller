@@ -11,7 +11,7 @@ public class SlidingState : GroundedState
     {
         base.OnEnter();
         player.OnAnimComplete += ChangeState;
-        player.SetAnimation("Slide");
+        player.SetAnimation("Sliding");
         player.GetRigidBody().AddForce(player.transform.forward * slidingSpeed, ForceMode.VelocityChange);
     }
 

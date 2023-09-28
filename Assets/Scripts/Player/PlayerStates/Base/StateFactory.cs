@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public static class StateFactory
 {
@@ -13,10 +14,15 @@ public static class StateFactory
         foreach (PlayerState state in playerStateList)
         {
             if (state.GetType() == stateType)
+            { 
                 existingState = state;
+                break;
+            }
         }
         if (existingState != null)
+        {
             return existingState;
+        }
         else
         {
             PlayerState newState = (PlayerState)Activator.CreateInstance(stateType, args:player);
@@ -24,12 +30,5 @@ public static class StateFactory
             return newState;
         }
     }
-
-    /*public static PlayerState GetIdleState(Player player)
-    {
-        if (idleState == null)
-            idleState = new IdleState(player);
-        return idleState;
-    }*/
 
 }

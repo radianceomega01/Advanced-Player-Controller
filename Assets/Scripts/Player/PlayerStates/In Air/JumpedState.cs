@@ -13,9 +13,9 @@ public class JumpedState : InAirState
         hasJumped = false;
         jumpCount++;
         if (jumpCount == 1)
-            player.SetAnimation("Jump");
+            player.SetAnimation("Jumping");
         else
-            player.SetAnimation("DJump");
+            player.SetAnimation("DJumping");
     }
 
     public override void PhysicsProcess()
