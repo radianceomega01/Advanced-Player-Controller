@@ -3,29 +3,29 @@ using UnityEngine;
 
 public class JumpedState : InAirState
 {
-    float force = 5.5f;
-    bool hasJumped;
+    bool hasSkipedFirstFrame;
 
     public JumpedState(Player player) : base(player) { }
 
     public override void OnEnter()
     {
-        hasJumped = false;
-        jumpCount++;
-        if (jumpCount == 1)
+        base.OnEnter();
+        player.JumpCount++;
+        if (player.JumpCount == 1)
             player.SetAnimation("Jumping");
         else
             player.SetAnimation("DJumping");
+        player.GetRigidBody().AddForce(player.jumpForce * Vector3.up, ForceMode.Impulse);
     }
 
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
-        if (!hasJumped)
+        if (!hasSkipedFirstFrame)
+            hasSkipedFirstFrame = true;
+        else
         {
-            player.GetRigidBody().AddForce(force * Vector3.up, ForceMode.Impulse);
             player.SetState(StateFactory.GetPlayerState(typeof(FallingState), player));
-            hasJumped = true;
         }
     }
 

@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    //public values to be shared with player states
+    [SerializeField] public float walkingSpeed = 100f;
+    [SerializeField] public float runningSpeed = 250f;
+    [SerializeField] public float jumpForce = 400f;
+    [SerializeField] public float slideForce = 5f;
     [SerializeField] Transform footPos;
 
     PlayerActions playerActions;
@@ -12,6 +17,8 @@ public class Player : MonoBehaviour
     PlayerState previousState;
     Animator animator;
     Rigidbody rigidBody;
+
+    public int JumpCount { get; set; }
 
     public event Action OnAnimComplete;
 
@@ -53,8 +60,6 @@ public class Player : MonoBehaviour
     public PlayerState GetPreviousState() => previousState;
 
     public void SetAnimation(string name) => animator.Play(name);
-
-    //public void ResetAnimation(string name) => animator.ResetTrigger(name);
     public void SetAnimation(string name, float value) =>animator.SetFloat(name, value);
 
     public void AnimCompete() => OnAnimComplete?.Invoke();

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SlidingState : GroundedState
 {
-    float slidingSpeed = 7f;
     public SlidingState(Player player) : base(player) { }
 
     public override void OnEnter()
@@ -12,7 +11,7 @@ public class SlidingState : GroundedState
         base.OnEnter();
         player.OnAnimComplete += ChangeState;
         player.SetAnimation("Sliding");
-        player.GetRigidBody().AddForce(player.transform.forward * slidingSpeed, ForceMode.VelocityChange);
+        player.GetRigidBody().AddForce(player.transform.forward * player.slideForce, ForceMode.VelocityChange);
     }
 
     public override void PhysicsProcess()

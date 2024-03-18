@@ -18,16 +18,17 @@ public abstract class GroundedState : PlayerState
     public override void OnEnter()
     {
         playerActions.PlayerInput.Jump.performed += SwitchToJumpingState;
+
         layerMask = 1 << 3;
 
         if (player.GetPreviousState() != null && player.GetPreviousState().GetType() == typeof(FallingState))
         {
-            if (InAirState.jumpCount == 1)
+            if (player.JumpCount == 1)
                 player.SetAnimation("Landing");
             else
                 player.SetAnimation("DLanding");
 
-            InAirState.jumpCount = 0;
+            player.JumpCount = 0;
         }
     }
 
@@ -59,7 +60,7 @@ public abstract class GroundedState : PlayerState
         movementDir = (playerRightDir * moveInput.x + playerForwardDir * moveInput.y).normalized;
     }
 
-    public override void OnExit()
+    public override void OnExit() 
     {
         playerActions.PlayerInput.Jump.performed -= SwitchToJumpingState;
     }

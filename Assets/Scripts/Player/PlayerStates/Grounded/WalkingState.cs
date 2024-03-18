@@ -5,24 +5,23 @@ using UnityEngine.InputSystem;
 
 public class WalkingState : GroundedState
 {
-    float walkingSpeed = 100f;
     public WalkingState(Player player) : base(player) { }
 
     public override void OnEnter()
     {
         base.OnEnter();
 
-        player.SetAnimation("Walking");
-
         playerActions.PlayerInput.Sprint.performed += SwitchToRunningState;
         playerActions.PlayerInput.CrouchSlide.performed += SwitchToSlidingState;
+
+        player.SetAnimation("Walking");
     }
 
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
 
-        player.GetRigidBody().velocity = movementDir * walkingSpeed * Time.fixedDeltaTime;
+        player.GetRigidBody().velocity = movementDir * player.walkingSpeed * Time.fixedDeltaTime;
     }
 
     public override void Process()

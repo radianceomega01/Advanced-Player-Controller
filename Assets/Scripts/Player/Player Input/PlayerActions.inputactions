@@ -11,7 +11,8 @@
                     "id": "a518a94f-6f69-4776-b620-808d9165a363",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": "Hold(duration=0.1)"
+                    "interactions": "Hold(duration=0.1)",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Move",
@@ -19,7 +20,8 @@
                     "id": "43dd1be6-9018-4c44-ba1b-0164c2162e1f",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold(duration=0.1)"
+                    "interactions": "Hold(duration=0.1)",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Sprint",
@@ -27,7 +29,8 @@
                     "id": "366e5ba4-ec9f-4f90-9965-21ab8d875849",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold(duration=0.1)"
+                    "interactions": "Hold(duration=0.1)",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Jump",
@@ -35,7 +38,8 @@
                     "id": "46906412-4138-41a5-acca-de4af49e2120",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "WallRun",
@@ -43,7 +47,8 @@
                     "id": "5b8452f1-90ce-4cb6-8e6f-b75eefcefb52",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold(duration=0.1)"
+                    "interactions": "Hold(duration=0.1)",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Crouch/Slide",
@@ -51,7 +56,8 @@
                     "id": "3ba404bb-3d73-4668-995f-3a359ab35913",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold(duration=0.1)"
+                    "interactions": "Hold(duration=0.1)",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [

@@ -11,13 +11,11 @@ public class IdleState : GroundedState
     {
         base.OnEnter();
 
-        player.SetAnimation("Idle");
-
         playerActions.PlayerInput.Sprint.performed += SwitchToRunningState;
         playerActions.PlayerInput.CrouchSlide.performed += SwitchToCrouchingState;
 
+        player.SetAnimation("Idle");
         //playerActions.PlayerInput.Move.performed += _ => player.SetState(StateFactory.GetWalkingState(player));
-
     }
 
     public override void PhysicsProcess()

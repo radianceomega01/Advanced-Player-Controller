@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class RunningState : GroundedState
 {
-    float runningSpeed = 250f;
-
     public RunningState(Player player) : base(player) { }
 
     public override void OnEnter()
     {
         base.OnEnter();
+
         playerActions.PlayerInput.CrouchSlide.performed += SwitchToSlidingState;
+
         player.SetAnimation("Running");
     }
 
@@ -19,7 +19,7 @@ public class RunningState : GroundedState
     {
         base.PhysicsProcess();
 
-        player.GetRigidBody().velocity = movementDir * runningSpeed * Time.fixedDeltaTime;
+        player.GetRigidBody().velocity = movementDir * player.runningSpeed * Time.fixedDeltaTime;
     }
 
     public override void Process()

@@ -4,10 +4,9 @@ using UnityEngine.InputSystem;
 
 public abstract class InAirState : PlayerState
 {
-    public static int jumpCount;
     public InAirState(Player player) : base(player) { }
 
-    public override void OnEnter()
+    public override void OnEnter() 
     {
         playerActions.PlayerInput.Jump.performed += SwitchToJumpingState;
     }
@@ -16,14 +15,14 @@ public abstract class InAirState : PlayerState
 
     public override void Process() { }
 
-    public override void OnExit()
+    public override void OnExit() 
     {
         playerActions.PlayerInput.Jump.performed -= SwitchToJumpingState;
     }
 
     private void SwitchToJumpingState(InputAction.CallbackContext ctx)
     {
-        if (jumpCount == 2)
+        if (player.JumpCount == 2)
             return;
         player.SetState(new JumpedState(player));
     }
