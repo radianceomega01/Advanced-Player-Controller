@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class JumpedState : InAirState
 {
-    bool hasSkipedFirstFrame;
-
     public JumpedState(Player player) : base(player) { }
 
     public override void OnEnter()
@@ -21,17 +19,12 @@ public class JumpedState : InAirState
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
-        if (!hasSkipedFirstFrame)
-            hasSkipedFirstFrame = true;
-        else
-        {
-            player.SetState(StateFactory.GetPlayerState(typeof(FallingState), player));
-        }
     }
 
     public override void Process()
     {
         base.Process();
+        player.CheckAndMoveToFallingState();
     }
 
     public override void OnExit()

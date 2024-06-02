@@ -17,8 +17,8 @@ public class SlidingState : GroundedState
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
-        if (player.GetRigidBody().velocity.magnitude <= 0.35f)
-            player.SetState(StateFactory.GetPlayerState(typeof(IdleState), player));
+        /*if (player.GetRigidBody().velocity.magnitude <= 0.35f)
+            ChangeState();*/
     }
 
     public override void Process()

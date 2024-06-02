@@ -17,8 +17,11 @@ public class Player : MonoBehaviour
     PlayerState previousState;
     Animator animator;
     Rigidbody rigidBody;
+    LayerMask layerMask = 1 << 3;
+    Collider[] colliders;
 
     public int JumpCount { get; set; }
+    public float PreviousYPos { get; private set; }
 
     public event Action OnAnimComplete;
 
@@ -48,6 +51,10 @@ public class Player : MonoBehaviour
         state.Process();
     }
 
+    private void LateUpdate()
+    {
+        PreviousYPos = transform.position.y;
+    }
     public void SetState(PlayerState newState)
     {
         previousState = state;
@@ -60,15 +67,23 @@ public class Player : MonoBehaviour
     public PlayerState GetPreviousState() => previousState;
 
     public void SetAnimation(string name) => animator.Play(name);
+    public void SetAnimationTrigger(string name) => animator.SetTrigger(name);
     public void SetAnimation(string name, float value) =>animator.SetFloat(name, value);
 
-    public void AnimCompete() => OnAnimComplete?.Invoke();
+    public void AnimComplete() => OnAnimComplete?.Invoke();
 
     public PlayerActions GetPlayerActions() => playerActions;
 
     public Vector3 GetFootPos() => footPos.position;
 
     public Rigidbody GetRigidBody() => rigidBody;
+
+    public void CheckAndMoveToFallingState()
+    {
+        colliders = Physics.OverlapSphere(GetFootPos(), 0.5f, layerMask);
+        if (transform.position.y < PreviousYPos && colliders.Length == 0)
+            SetState(StateFactory.GetPlayerState(typeof(FallingState), this));
+    }
 
     private void OnDisable()
     {

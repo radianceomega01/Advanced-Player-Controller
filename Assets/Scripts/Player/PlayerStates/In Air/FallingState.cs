@@ -12,8 +12,10 @@ public class FallingState : InAirState
     {
         base.OnEnter();
         layerMask = 1 << 3;
-        if (player.GetPreviousState().GetType().IsSubclassOf(typeof(GroundedState)))
-            player.SetAnimation("Falling");
+        if (player.JumpCount <= 1)
+            TransitionToFalling();
+        else
+            player.SetAnimationTrigger("DFall");
     }
 
     public override void PhysicsProcess()
@@ -34,5 +36,13 @@ public class FallingState : InAirState
     public override void OnExit()
     {
         base.OnExit();
+    }
+
+    private void TransitionToFalling()
+    {
+        if (player.GetPreviousState().GetType().IsSubclassOf(typeof(GroundedState)))
+            player.SetAnimation("Falling");
+        else
+            player.SetAnimationTrigger("Fall");
     }
 }

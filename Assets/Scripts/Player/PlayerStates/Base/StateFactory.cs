@@ -13,12 +13,14 @@ public static class StateFactory
         {
             if (playerStateList[i].GetType() == stateType)
             {
+                Debug.Log(playerStateList[i]);
                 return (playerStateList[i]);
             }
         }
 
         PlayerState newState = (PlayerState)Activator.CreateInstance(stateType, args: player);
         playerStateList.Add(newState);
+        Debug.Log(newState);
         return newState;
     }
 
