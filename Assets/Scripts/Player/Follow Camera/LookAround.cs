@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,12 @@ using UnityEngine;
 public class LookAround : MonoBehaviour
 {
     [SerializeField] Transform cameraTarget;
+    [SerializeField] FixedTouchField fixedTouchField;
     [SerializeField] float rotationSpeedX = 13f;
     [SerializeField] float rotationSpeedY = 8f;
     [SerializeField] float turnSpeed = 0.01f;
     [SerializeField] float maxLookUpAngle = 60f;
-    [SerializeField] float maxLookDownAngle = -60f;
+    [SerializeField] float maxLookDownAngle = 60f;
 
     Vector2 moveDelta;
 
@@ -19,6 +21,9 @@ public class LookAround : MonoBehaviour
 
     float camAngularIncrementY;
     float camAngularIncrementX;
+
+    Ray ray;
+    RaycastHit hit;
 
     void Awake()
     {
@@ -32,7 +37,11 @@ public class LookAround : MonoBehaviour
 
     private void Update()
     {
+#if PLATFORM_ANDROID
+        moveDelta = fixedTouchField.TouchDist;
+#else
         moveDelta = playerActions.PlayerInput.LookAround.ReadValue<Vector2>();
+#endif
         HandleCameraRotation();
         HandlePlayerRotation();
     }

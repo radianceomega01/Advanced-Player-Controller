@@ -24,6 +24,6 @@ public abstract class InAirState : PlayerState
     {
         if (player.JumpCount == 2)
             return;
-        player.SetState(new JumpedState(player));
+        player.SetState(StateFactory.GetPlayerState(typeof(JumpedState), player));
     }
 }

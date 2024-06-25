@@ -30,6 +30,10 @@ public class WalkingState : GroundedState
 
         if (moveInput.magnitude == 0f)
             player.SetState(StateFactory.GetPlayerState(typeof(IdleState), player));
+#if (UNITY_ANDROID && !UNITY_EDITOR)
+        if (CanSwitchToRunningState())
+            SwitchToRunningState();
+#endif
     }
 
     public override void OnExit()
@@ -41,9 +45,19 @@ public class WalkingState : GroundedState
 
     private void SwitchToRunningState(InputAction.CallbackContext ctx)
     {
-        if (moveInput.x == 0 && moveInput.y == 1)
+        if (moveInput.y == 1)
         {
             player.SetState(StateFactory.GetPlayerState(typeof(RunningState), player));
         }
+    }
+
+    private void SwitchToRunningState() => player.SetState(StateFactory.GetPlayerState(typeof(RunningState), player));
+
+    private bool CanSwitchToRunningState()
+    {
+        if(moveInput.magnitude == 1 && (moveInput.x > -0.71f && moveInput.x < 0.71f && moveInput.y > 0))
+            return true;
+        else
+            return false;
     }
 }

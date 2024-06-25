@@ -28,7 +28,11 @@ public class RunningState : GroundedState
 
         if (moveInput.magnitude == 0f)
             player.SetState(StateFactory.GetPlayerState(typeof(IdleState), player));
+#if (PLATFORM_ANDROID && !UNITY_EDITOR)
+        if (CanSwitchToWalkingState())
+#else
         if (pressTime <= 0.1f)
+#endif
             player.SetState(StateFactory.GetPlayerState(typeof(WalkingState), player));
     }
 
@@ -36,6 +40,14 @@ public class RunningState : GroundedState
     {
         base.OnExit();
         playerActions.PlayerInput.CrouchSlide.performed -= SwitchToSlidingState;
+    }
+
+    private bool CanSwitchToWalkingState()
+    {
+        if (moveInput.magnitude < 1 && moveInput.y <= 0)
+            return true;
+        else
+            return false;
     }
 
 }
