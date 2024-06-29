@@ -80,11 +80,21 @@ public class Player : MonoBehaviour
 
     public void CheckAndMoveToFallingState()
     {
-        colliders = Physics.OverlapSphere(GetFootPos(), 0.5f, layerMask);
+        colliders = Physics.OverlapSphere(GetFootPos(), 0.1f, layerMask);
         if (transform.position.y < PreviousYPos && colliders.Length == 0)
             SetState(StateFactory.GetPlayerState(typeof(FallingState), this));
+        /*if (colliders.Length == 0)
+            SetState(StateFactory.GetPlayerState(typeof(FallingState), this));*/
     }
 
+    public void CheckAndMoveToGroundedState()
+    {
+        colliders = Physics.OverlapSphere(GetFootPos(), 0.1f, layerMask);
+        if (colliders.Length > 0)
+        {
+            SetState(StateFactory.GetPlayerState(typeof(IdleState), this));
+        }
+    }
     private void OnDisable()
     {
         playerActions.Disable();

@@ -21,11 +21,7 @@ public class FallingState : InAirState
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
-        colliders = Physics.OverlapSphere(player.GetFootPos(), 0.1f, layerMask);
-        if (colliders.Length > 0)
-        {
-            player.SetState(StateFactory.GetPlayerState(typeof(IdleState), player));
-        }
+        player.CheckAndMoveToGroundedState();
     }
 
     public override void Process()

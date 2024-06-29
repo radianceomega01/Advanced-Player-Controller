@@ -42,8 +42,11 @@ public class LookAround : MonoBehaviour
 #else
         moveDelta = playerActions.PlayerInput.LookAround.ReadValue<Vector2>();
 #endif
-        HandleCameraRotation();
         HandlePlayerRotation();
+    }
+    private void LateUpdate()
+    {
+        HandleCameraRotation();
     }
 
     private void HandleCameraRotation()

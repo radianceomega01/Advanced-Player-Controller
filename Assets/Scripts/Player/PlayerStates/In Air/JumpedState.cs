@@ -5,9 +5,12 @@ public class JumpedState : InAirState
 {
     public JumpedState(Player player) : base(player) { }
 
+    private bool isFirstFrame;
+
     public override void OnEnter()
     {
         base.OnEnter();
+        isFirstFrame = true;
         player.JumpCount++;
         if (player.JumpCount == 1)
             player.SetAnimation("Jumping");
@@ -19,6 +22,10 @@ public class JumpedState : InAirState
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
+        if(!isFirstFrame)
+            player.CheckAndMoveToGroundedState();
+        else
+            isFirstFrame = false;
     }
 
     public override void Process()
