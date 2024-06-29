@@ -9,6 +9,7 @@ public class SlidingState : GroundedState
     public override void OnEnter()
     {
         base.OnEnter();
+        player.SetPlayerCollider(1);
         player.OnAnimComplete += ChangeState;
         player.SetAnimation("Sliding");
         player.GetRigidBody().AddForce(player.transform.forward * player.slideForce, ForceMode.VelocityChange);
@@ -30,6 +31,7 @@ public class SlidingState : GroundedState
     public override void OnExit()
     {
         base.OnExit();
+        player.SetPlayerCollider(0);
         player.OnAnimComplete -= ChangeState;
     }
 

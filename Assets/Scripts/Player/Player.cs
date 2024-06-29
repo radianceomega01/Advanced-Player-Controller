@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     [SerializeField] public float slideForce = 5f;
     [SerializeField] Transform footPos;
 
+    [Header("Colliders")]
+    [SerializeField] Collider[] playerColliders;
+
     PlayerActions playerActions;
     PlayerState state;
     PlayerState previousState;
@@ -77,6 +80,20 @@ public class Player : MonoBehaviour
     public Vector3 GetFootPos() => footPos.position;
 
     public Rigidbody GetRigidBody() => rigidBody;
+    public void SetPlayerCollider(int type)
+    {
+        if (type >= 0 && type < playerColliders.Length)
+        {
+            playerColliders[type].gameObject.SetActive(true);
+            for (int i = 0; i < playerColliders.Length; i++)
+            {
+                if (i != type)
+                    playerColliders[i].gameObject.SetActive(false);
+            } 
+        }
+        else
+            return;
+    }
 
     public void CheckAndMoveToFallingState()
     {
