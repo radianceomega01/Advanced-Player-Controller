@@ -50,6 +50,6 @@ public class IdleState : GroundedState
 
     private void SwitchToCrouchingState(InputAction.CallbackContext ctx)
     {
-        player.SetState(StateFactory.GetPlayerState(typeof(CrouchingState), player));
+        //player.SetState(StateFactory.GetPlayerState(typeof(CrouchingState), player));
     }
 }
