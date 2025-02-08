@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] InputEventsSO inputEventSO;
+    [SerializeField] Transform footPos;
+
     //public values to be shared with player states
     [SerializeField] public float walkingSpeed = 100f;
     [SerializeField] public float runningSpeed = 250f;
     [SerializeField] public float jumpForce = 400f;
     [SerializeField] public float slideForce = 5f;
-    [SerializeField] Transform footPos;
 
     [Header("Colliders")]
     [SerializeField] Collider[] playerColliders;
@@ -52,6 +54,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         state.Process();
+        inputEventSO.PlayerPositionEvent.Invoke(transform.position);
     }
 
     private void LateUpdate()

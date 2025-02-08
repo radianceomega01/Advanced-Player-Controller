@@ -213,6 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc1353e5f62804541be321d13e449f40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputEventSO: {fileID: 11400000, guid: cb47f72efe230844b80dc031a348b915, type: 2}
 --- !u!114 &103032318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -993,7 +994,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1091207796
 MonoBehaviour:
@@ -1004,10 +1005,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1091207794}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 203e8fadb8931ad4e8682b14c40121cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b0a185933a6d8b4fac1fa0f3e22736e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2258235669313282107}
+  inputEventSO: {fileID: 11400000, guid: cb47f72efe230844b80dc031a348b915, type: 2}
+  camRotationSpeedX: 13
+  camRotationSpeedY: 8
+  camMaxLookUpAngle: 60
+  camMaxLookDownAngle: 60
 --- !u!1 &1136265139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1100,7 +1105,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &1280109451
 PrefabInstance:
@@ -1139,7 +1144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8590402609657316639, guid: 22e6bbfce3948044988d85f693d219b5, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8590402609657316639, guid: 22e6bbfce3948044988d85f693d219b5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1380,7 +1385,7 @@ Transform:
   m_Children:
   - {fileID: 1691526359}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1974066106
 GameObject:
@@ -1458,7 +1463,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &73530032120579519
 GameObject:
@@ -1652,11 +1657,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b3cb97f711125438a03010e1fd701f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputEventSO: {fileID: 11400000, guid: cb47f72efe230844b80dc031a348b915, type: 2}
+  footPos: {fileID: 4329115088978870477}
   walkingSpeed: 100
   runningSpeed: 250
   jumpForce: 400
   slideForce: 5
-  footPos: {fileID: 4329115088978870477}
   playerColliders:
   - {fileID: 5763488562939393616}
   - {fileID: 6752942151047917152}
@@ -1842,7 +1848,7 @@ GameObject:
   - component: {fileID: 5311698569918757441}
   - component: {fileID: 5311698569918757452}
   - component: {fileID: 885851980291122821}
-  - component: {fileID: 4937605146408584591}
+  - component: {fileID: 5311698569918757453}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2041,7 +2047,7 @@ Transform:
   - {fileID: 4329115088978870477}
   - {fileID: 4329115089567754454}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2361560371873608360
 Transform:
@@ -3203,25 +3209,6 @@ Transform:
   m_Father: {fileID: 6431023928522113621}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4937605146408584591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1449329828971461249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b0a185933a6d8b4fac1fa0f3e22736e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraTarget: {fileID: 1091207795}
-  fixedTouchField: {fileID: 103032317}
-  rotationSpeedX: 13
-  rotationSpeedY: 8
-  turnSpeed: 0.01
-  maxLookUpAngle: 60
-  maxLookDownAngle: 60
 --- !u!4 &5047082502027599354
 Transform:
   m_ObjectHideFlags: 0
@@ -3323,6 +3310,20 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &5311698569918757453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449329828971461249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b3a2480250d2a4989354846fd4bd77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputEventSO: {fileID: 11400000, guid: cb47f72efe230844b80dc031a348b915, type: 2}
+  playerRotDuration: 0.5
 --- !u!4 &5447630220830202069
 Transform:
   m_ObjectHideFlags: 0
