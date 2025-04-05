@@ -2,70 +2,52 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class GroundedState : PlayerState
+public abstract class GroundedState : BaseMovementState
 {
-    Vector3 playerForwardDir;
-    Vector3 playerRightDir;
-
-    protected float pressTime;
-    protected Vector2 moveInput;
-    protected Vector3 movementDir;
-
-    public GroundedState(Player player) : base(player) { }
+    public GroundedState(PlayerMovement player) : base(player) { }
 
     public override void OnEnter()
     {
-        playerActions.PlayerInput.Jump.performed += SwitchToJumpingState;
+        base.OnEnter();
+        player.JumpCount = 0; 
+        player.PlayerInput.Jump.performed += SwitchToJumpingState;
+        player.OnMovementInputTypeChanged += MovementInputTypeChanged;
 
-        if (player.GetPreviousState() != null && player.GetPreviousState().GetType() == typeof(InAirState))
+        if (player.GetPreviousState() != null && player.GetPreviousState().GetType() == typeof(FallingState))
         {
-            if (player.JumpCount == 1)
+            if (player.JumpCount <= 1)
                 player.SetAnimation("Landing");
             else
                 player.SetAnimation("DLanding");
         }
-        player.JumpCount = 0;
     }
 
-    public override void PhysicsProcess() { }
-
-    public override void Process()
+    public override void PhysicsProcess() 
     {
-        GetPlayerMovInput();
-        player.CheckAndMoveToFallingState();
+        base.PhysicsProcess();
+        CheckAndMoveToFallingState();
     }
 
     public override void OnExit() 
     {
-        playerActions.PlayerInput.Jump.performed -= SwitchToJumpingState;
+        base.OnExit();
+        player.PlayerInput.Jump.performed -= SwitchToJumpingState;
+        player.OnMovementInputTypeChanged -= MovementInputTypeChanged;
     }
+    private void MovementInputTypeChanged() => StateFactory.GetGroundedStateBasedOnMovementInputType(player);
 
     private void SwitchToJumpingState(InputAction.CallbackContext ctx)
     {
-        player.SetState(StateFactory.GetPlayerState(typeof(JumpedState), player));
-    }
-
-    private void GetPlayerMovInput()
-    {
-        moveInput = playerActions.PlayerInput.Move.ReadValue<Vector2>();
-        pressTime = playerActions.PlayerInput.Sprint.ReadValue<float>();
-
-        player.SetAnimation("InpX", moveInput.x);
-        player.SetAnimation("InpY", moveInput.y);
-
-        playerRightDir = player.transform.right;
-        playerRightDir.y = 0;
-        playerRightDir.Normalize();
-
-        playerForwardDir = player.transform.forward;
-        playerForwardDir.y = 0;
-        playerForwardDir.Normalize();
-
-        movementDir = (playerRightDir * moveInput.x + playerForwardDir * moveInput.y).normalized;
+        player.ChangeState(StateFactory.GetPlayerState(typeof(JumpedState), player));
     }
 
     protected void SwitchToSlidingState(InputAction.CallbackContext ctx)
     {
-        player.SetState(StateFactory.GetPlayerState(typeof(SlidingState), player));
+        player.ChangeState(StateFactory.GetPlayerState(typeof(SlidingState), player));
+    }
+    private void CheckAndMoveToFallingState()
+    {
+        if (!player.IsGrounded())
+            player.ChangeState(StateFactory.GetPlayerState(typeof(FallingState), player));
     }
 }

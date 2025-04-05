@@ -1,17 +1,11 @@
 
-using UnityEngine;
-
 public class FallingState : InAirState
 {
-    LayerMask layerMask;
-    Collider[] colliders;
-
-    public FallingState(Player player) : base(player) { }
+    public FallingState(PlayerMovement player) : base(player) { }
 
     public override void OnEnter()
     {
         base.OnEnter();
-        layerMask = 1 << 3;
         if (player.JumpCount <= 1)
             TransitionToFalling();
         else
@@ -21,17 +15,7 @@ public class FallingState : InAirState
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
-        player.CheckAndMoveToGroundedState();
-    }
-
-    public override void Process()
-    {
-        base.Process();
-    }
-
-    public override void OnExit()
-    {
-        base.OnExit();
+        CheckAndMoveToGroundedState();
     }
 
     private void TransitionToFalling()
@@ -40,5 +24,10 @@ public class FallingState : InAirState
             player.SetAnimation("Falling");
         else
             player.SetAnimationTrigger("Fall");
+    }
+    private void CheckAndMoveToGroundedState()
+    {
+        if (player.IsGrounded())
+            StateFactory.GetGroundedStateBasedOnMovementInputType(player);
     }
 }

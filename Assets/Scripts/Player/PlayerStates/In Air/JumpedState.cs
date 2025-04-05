@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class JumpedState : InAirState
 {
-    public JumpedState(Player player) : base(player) { }
+    public JumpedState(PlayerMovement player) : base(player) { }
 
     private bool isFirstFrame;
 
@@ -16,26 +16,34 @@ public class JumpedState : InAirState
             player.SetAnimation("Jumping");
         else
             player.SetAnimation("DJumping");
-        player.GetRigidBody().AddForce(player.jumpForce * Vector3.up, ForceMode.Impulse);
+
+        player.VerticalVelocity = Mathf.Sqrt(-2f * player.jumpHeight * player.gravity); //u = -2gh (initial velocity for jump)
     }
 
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
-        if(!isFirstFrame)
-            player.CheckAndMoveToGroundedState();
+        if (!isFirstFrame)
+            CheckAndMoveToFallingOrGroundedStateOnJump();
         else
             isFirstFrame = false;
-    }
-
-    public override void Process()
-    {
-        base.Process();
-        player.CheckAndMoveToFallingState();
     }
 
     public override void OnExit()
     {
         base.OnExit();
+        isFirstFrame = false;
+    }
+    private void CheckAndMoveToFallingOrGroundedStateOnJump()
+    {
+        if (player.IsGrounded())
+            StateFactory.GetGroundedStateBasedOnMovementInputType(player);
+        else
+        {
+            if (player.transform.position.y < player.PreviousYPos)
+            {
+                player.ChangeState(StateFactory.GetPlayerState(typeof(FallingState), player));
+            }
+        }
     }
 }

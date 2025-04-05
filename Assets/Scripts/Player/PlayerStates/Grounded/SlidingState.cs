@@ -1,37 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
+
+
 using UnityEngine;
 
 public class SlidingState : GroundedState
 {
-    public SlidingState(Player player) : base(player) { }
+    public SlidingState(PlayerMovement player) : base(player) { }
 
     public override void OnEnter()
     {
         base.OnEnter();
-        player.SetPlayerCollider(1);
+        player.SetVerticalVelocityWithHorizontalVelocity(player.slidingSpeed);
+        //player.SetPlayerCollider(1);
         player.OnAnimComplete += ChangeState;
         player.SetAnimation("Sliding");
-        player.GetRigidBody().AddForce(player.transform.forward * player.slideForce, ForceMode.VelocityChange);
     }
 
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
-        /*if (player.GetRigidBody().velocity.magnitude <= 0.35f)
-            ChangeState();*/
+        player.CharacterController.Move(Time.fixedDeltaTime * (player.MovementDir * player.slidingSpeed + Vector3.up * player.VerticalVelocity));
     }
 
-    public override void Process()
-    {
-        base.Process();
-    }
-
-    private void ChangeState() => player.SetState(StateFactory.GetPlayerState(typeof(IdleState), player));
+    private void ChangeState() => StateFactory.GetGroundedStateBasedOnMovementInputType(player);
     public override void OnExit()
     {
         base.OnExit();
-        player.SetPlayerCollider(0);
+        //player.SetPlayerCollider(0);
         player.OnAnimComplete -= ChangeState;
     }
 
