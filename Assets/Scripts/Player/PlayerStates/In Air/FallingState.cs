@@ -18,6 +18,12 @@ public class FallingState : InAirState
         CheckAndMoveToGroundedState();
     }
 
+    public override void OnExit()
+    {
+        base.OnExit();
+        player.ResetAnimationTrigger("Fall");
+    }
+
     private void TransitionToFalling()
     {
         if (player.GetPreviousState().GetType().IsSubclassOf(typeof(GroundedState)))

@@ -21,6 +21,8 @@ public class SlidingState : GroundedState
         player.CharacterController.Move(Time.fixedDeltaTime * (player.MovementDir * player.slidingSpeed + Vector3.up * player.VerticalVelocity));
     }
 
+    protected override void MovementInputTypeChanged() { }
+
     private void ChangeState() => StateFactory.GetGroundedStateBasedOnMovementInputType(player);
     public override void OnExit()
     {

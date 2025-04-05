@@ -12,7 +12,6 @@ public class WalkingState : GroundedState
         base.OnEnter();
 
         player.PlayerInput.CrouchSlide.performed += SwitchToSlidingState;
-        player.PlayerInput.Sprint.performed += SwitchToRunningState;
 
         player.SetVerticalVelocityWithHorizontalVelocity(player.walkingSpeed);
         player.SetAnimation("Walking");
@@ -28,10 +27,7 @@ public class WalkingState : GroundedState
     public override void OnExit()
     {
         base.OnExit();
-        player.PlayerInput.Sprint.performed -= SwitchToRunningState;
         player.PlayerInput.CrouchSlide.performed -= SwitchToSlidingState;
     }
-
-    private void SwitchToRunningState(InputAction.CallbackContext ctx) => player.ChangeState(StateFactory.GetPlayerState(typeof(RunningState), player));
 
 }

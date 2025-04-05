@@ -16,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public float jumpHeight = 1.5f;
     [SerializeField] public float slidingSpeed = 4f;
     [SerializeField] public float gravity = -15f;
-    [SerializeField] public float timeDelayToFall = 0.15f;
 
     /*[Header("Colliders")]
     [SerializeField] Collider[] playerColliders;*/
@@ -52,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         CharacterController = GetComponent<CharacterController>();
         layerMask = 1 << LayerMask.NameToLayer("Ground");
         JoystickAxisValueOnMaxXAndY = Mathf.Sqrt(2) / 2;
-        checkBoxHalfExtents = new Vector3(0.25f, 0.1f, 0.25f);
+        checkBoxHalfExtents = new Vector3(CharacterController.radius, 0.1f, CharacterController.radius);
     }
 
     private void OnEnable()
@@ -119,7 +118,6 @@ public class PlayerMovement : MonoBehaviour
             MovementInputType = MovementInputType.Moving;
         else
             MovementInputType = MovementInputType.Idle;
-
         if (previousType != MovementInputType)
             OnMovementInputTypeChanged?.Invoke();
     }
@@ -128,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
 #if (PLATFORM_ANDROID && !UNITY_EDITOR)
         return (moveInput.magnitude == 1 && moveInput.y > JoystickAxisValueOnMaxXAndY);
 #else
-        return (sprintPressTime >= 0.1f && moveInput.magnitude == 1);
+        return (sprintPressTime >= 0.1f && moveInput.y > 0);
 #endif
     }
     private bool IsMovingTypeInput()
@@ -147,8 +145,6 @@ public class PlayerMovement : MonoBehaviour
     }
     public bool IsGrounded()
     {
-        /*Collider[] colliders = Physics.OverlapSphere(footTransform.position, 0.1f, layerMask);
-        return colliders.Length > 0;*/
         return Physics.CheckBox(footTransform.position, checkBoxHalfExtents, Quaternion.identity,layerMask);
     }
     public float GetMovementSpeed()
@@ -171,6 +167,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void SetAnimation(string name) => animator.Play(name);
     public void SetAnimationTrigger(string name) => animator.SetTrigger(name);
+    public void ResetAnimationTrigger(string name) => animator.ResetTrigger(name);
     public void SetAnimation(string name, float value) =>animator.SetFloat(name, value);
 
     public void AnimComplete() => OnAnimComplete?.Invoke();

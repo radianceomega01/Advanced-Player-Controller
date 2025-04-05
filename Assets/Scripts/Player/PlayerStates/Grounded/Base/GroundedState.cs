@@ -34,7 +34,7 @@ public abstract class GroundedState : BaseMovementState
         player.PlayerInput.Jump.performed -= SwitchToJumpingState;
         player.OnMovementInputTypeChanged -= MovementInputTypeChanged;
     }
-    private void MovementInputTypeChanged() => StateFactory.GetGroundedStateBasedOnMovementInputType(player);
+    protected virtual void MovementInputTypeChanged() => StateFactory.GetGroundedStateBasedOnMovementInputType(player);
 
     private void SwitchToJumpingState(InputAction.CallbackContext ctx)
     {
