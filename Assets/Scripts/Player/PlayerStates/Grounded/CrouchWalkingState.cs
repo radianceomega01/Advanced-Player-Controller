@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CrouchWalkingState : GroundedState
 {
-    public CrouchWalkingState(Player player) : base(player) { }
+    public CrouchWalkingState(PlayerMovement player) : base(player) { }
 
     public override void OnEnter()
     {

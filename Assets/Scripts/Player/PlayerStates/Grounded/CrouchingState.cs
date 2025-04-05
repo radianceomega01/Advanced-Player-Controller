@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CrouchingState : GroundedState
 {
-    public CrouchingState(Player player) : base(player) { }
+    public CrouchingState(PlayerMovement player) : base(player) { }
 
     public override void OnEnter()
     {
