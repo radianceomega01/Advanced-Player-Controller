@@ -12,6 +12,11 @@ public class PlayerLookAround : MonoBehaviour
     {
         inputEventSO.CameraRotationEvent.AddListener(OnCameraRotationReceived);
     }
+    private void Start()
+    {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+    }
 
     private void OnDestroy()
     {

@@ -12,14 +12,6 @@ public abstract class GroundedState : BaseMovementState
         player.JumpCount = 0; 
         player.PlayerInput.Jump.performed += SwitchToJumpingState;
         player.OnMovementInputTypeChanged += MovementInputTypeChanged;
-
-        if (player.GetPreviousState() != null && player.GetPreviousState().GetType() == typeof(FallingState))
-        {
-            if (player.JumpCount <= 1)
-                player.SetAnimation("Landing");
-            else
-                player.SetAnimation("DLanding");
-        }
     }
 
     public override void PhysicsProcess() 

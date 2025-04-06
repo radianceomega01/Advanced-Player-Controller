@@ -11,9 +11,15 @@ public class IdleState : GroundedState
     public override void OnEnter()
     {
         base.OnEnter();
+
+        if (player.GetPreviousState() != null && player.GetPreviousState().GetType() == typeof(FallingState))
+        {
+            player.SetAnimation("Landing");
+        }
         //player.PlayerInput.CrouchSlide.performed += SwitchToCrouchingState;
         player.SetAnimation("Idle");
         player.SetVerticalVelocityWithHorizontalVelocity(0f);
+
     }
 
     public override void OnExit()

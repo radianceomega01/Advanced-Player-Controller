@@ -27,7 +27,6 @@ public class SlidingState : GroundedState
     public override void Process()
     {
         base.Process();
-        Debug.LogWarning(currentSpeed);
         currentSpeed += player.slidingDeAccelerationMultiplier * player.gravity * Time.deltaTime;
         currentSpeed = Mathf.Clamp(currentSpeed, 0f, slidingSpeed);
     }

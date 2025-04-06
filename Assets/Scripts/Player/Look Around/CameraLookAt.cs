@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraLookAround : MonoBehaviour
+public class CameraLookAt : MonoBehaviour
 {
     [SerializeField] InputEventsSO inputEventSO;
     [SerializeField] float camRotationSpeedX = 13f;
