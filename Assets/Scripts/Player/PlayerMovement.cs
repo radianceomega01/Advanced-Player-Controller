@@ -14,7 +14,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public float walkingSpeed = 1.75f;
     [SerializeField] public float runningSpeed = 4f;
     [SerializeField] public float jumpHeight = 1.5f;
-    [SerializeField] public float slidingSpeed = 4f;
+    [SerializeField] public float slidingSpeedAddition = 3f;
+    [SerializeField] public float slidingDeAccelerationMultiplier = 0.3f;
     [SerializeField] public float gravity = -15f;
 
     /*[Header("Colliders")]
@@ -30,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 playerRightDir;
     float sprintPressTime;
     Vector3 checkBoxHalfExtents;
+    MovementInputType previousType;
 
     public float JoystickAxisValueOnMaxXAndY { get; private set; }
     public PlayerActions.PlayerInputActions PlayerInput { get; private set; }
@@ -106,9 +108,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetPlayerMovementType()
     {
-        MovementInputType previousType = MovementInputType;
+        previousType = MovementInputType;
         moveInput = playerActions.PlayerInput.Move.ReadValue<Vector2>();
         sprintPressTime = playerActions.PlayerInput.Sprint.ReadValue<float>();
+
         SetAnimation("InpX", moveInput.x);
         SetAnimation("InpY", moveInput.y);
 
@@ -124,19 +127,14 @@ public class PlayerMovement : MonoBehaviour
     private bool IsSprintingTypeInput()
     {
 #if (PLATFORM_ANDROID && !UNITY_EDITOR)
-        return (moveInput.magnitude == 1 && moveInput.y > JoystickAxisValueOnMaxXAndY);
+        return (moveInput.magnitude > 0.9f && moveInput.y > JoystickAxisValueOnMaxXAndY);
 #else
         return (sprintPressTime >= 0.1f && moveInput.y > 0);
 #endif
     }
     private bool IsMovingTypeInput()
     {
-#if (PLATFORM_ANDROID && !UNITY_EDITOR)
-        return (moveInput.magnitude > 0 && moveInput.magnitude < 1) ||
-            (moveInput.magnitude == 1 && moveInput.y < JoystickAxisValueOnMaxXAndY);
-#else
         return (Mathf.Abs(moveInput.x) > 0 || Mathf.Abs(moveInput.y) > 0);
-#endif
     }
 
     public void SetVerticalVelocityWithHorizontalVelocity(float horizontalVelocity)

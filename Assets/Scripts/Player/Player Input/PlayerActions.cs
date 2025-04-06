@@ -33,7 +33,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""id"": ""43dd1be6-9018-4c44-ba1b-0164c2162e1f"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
-                    ""interactions"": ""Hold(duration=0.1)"",
+                    ""interactions"": ""Hold(duration=0.01,pressPoint=0.01)"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -197,7 +197,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""c2ba0e97-3ad7-4e39-9996-cef0fd7fb456"",
                     ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(duration=0.01,pressPoint=0.01)"",
                     ""processors"": """",
                     ""groups"": ""Mobile"",
                     ""action"": ""Move"",
