@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 checkBoxHalfExtents;
     MovementInputType previousType;
 
-    public float JoystickAxisValueOnMaxXAndY { get; private set; }
+    public const float JOYSTICK_AXIS_VALUE_ON_MAX_X_AND_Y = 0.5f;
     public PlayerActions.PlayerInputActions PlayerInput { get; private set; }
     public CharacterController CharacterController { get; private set; }
     public int JumpCount { get; set; }
@@ -52,7 +52,6 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         CharacterController = GetComponent<CharacterController>();
         layerMask = 1 << LayerMask.NameToLayer("Ground");
-        JoystickAxisValueOnMaxXAndY = Mathf.Sqrt(2) / 2;
         checkBoxHalfExtents = new Vector3(CharacterController.radius, 0.1f, CharacterController.radius);
     }
 
@@ -127,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
     private bool IsSprintingTypeInput()
     {
 #if (PLATFORM_ANDROID && !UNITY_EDITOR)
-        return (moveInput.magnitude > 0.9f && moveInput.y > JoystickAxisValueOnMaxXAndY);
+        return (moveInput.magnitude > 0.9f && moveInput.y > JOYSTICK_AXIS_VALUE_ON_MAX_X_AND_Y);
 #else
         return (sprintPressTime >= 0.1f && moveInput.y > 0);
 #endif
