@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 playerForwardDir;
     Vector3 playerRightDir;
     float sprintPressTime;
-    Vector3 checkBoxHalfExtents;
+    float overlapSphereRadius;
     MovementInputType previousType;
 
     public const float JOYSTICK_AXIS_VALUE_ON_MAX_X_AND_Y = 0.5f;
@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         CharacterController = GetComponent<CharacterController>();
         layerMask = 1 << LayerMask.NameToLayer("Ground");
-        checkBoxHalfExtents = new Vector3(CharacterController.radius, 0.1f, CharacterController.radius);
+        overlapSphereRadius = CharacterController.radius - 0.1f;
     }
 
     private void OnEnable()
@@ -142,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public bool IsGrounded()
     {
-        return Physics.CheckBox(footTransform.position, checkBoxHalfExtents, Quaternion.identity,layerMask);
+        return Physics.CheckSphere(footTransform.position, overlapSphereRadius, layerMask);
     }
     public float GetMovementSpeed()
     {
@@ -172,6 +172,18 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         playerActions.Disable();
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
+        Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
+
+        if (IsGrounded()) Gizmos.color = transparentGreen;
+        else Gizmos.color = transparentRed;
+
+        // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
+        Gizmos.DrawSphere(footTransform.position - Vector3.up * overlapSphereRadius,
+            overlapSphereRadius);
     }
 }
 

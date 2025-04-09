@@ -18,13 +18,19 @@ public class IdleState : GroundedState
         }
         //player.PlayerInput.CrouchSlide.performed += SwitchToCrouchingState;
         player.SetAnimation("Idle");
-        player.SetVerticalVelocityWithHorizontalVelocity(0f);
+        player.SetVerticalVelocityWithHorizontalVelocity(player.walkingSpeed);
 
+    }
+    public override void PhysicsProcess()
+    {
+        base.PhysicsProcess();
+        player.CharacterController.Move(Time.fixedDeltaTime * Vector3.up * player.VerticalVelocity);
     }
 
     public override void OnExit()
     {
         base.OnExit();
+
         //player.PlayerInput.CrouchSlide.performed -= SwitchToCrouchingState;
     }
 
