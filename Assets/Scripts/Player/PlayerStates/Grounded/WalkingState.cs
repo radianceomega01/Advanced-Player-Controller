@@ -14,7 +14,7 @@ public class WalkingState : GroundedState
         player.PlayerInput.CrouchSlide.performed += SwitchToSlidingState;
 
         player.SetVerticalVelocityWithHorizontalVelocity(player.walkingSpeed);
-        player.SetAnimation("Walking");
+        player.SetAnimation("Walking", player.PreviousState.GetType() == typeof(SlidingState) ? 0.2f: 0.05f);
     }
 
     public override void PhysicsProcess()

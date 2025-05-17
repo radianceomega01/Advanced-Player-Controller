@@ -6,34 +6,41 @@ public class FallingState : InAirState
     public override void OnEnter()
     {
         base.OnEnter();
-        if (player.JumpCount <= 1)
-            TransitionToFalling();
-        else
-            player.SetAnimationTrigger("DFall");
+        TransitionToFalling();
     }
 
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
         CheckAndMoveToGroundedState();
-    }
-
-    public override void OnExit()
-    {
-        base.OnExit();
-        player.ResetAnimationTrigger("Fall");
+        // if (!isFirstFrame)
+        // {
+        //     CheckAndMoveToHangingState();
+        // }
+        // else
+        //     isFirstFrame = false;
     }
 
     private void TransitionToFalling()
     {
-        if (player.GetPreviousState().GetType().IsSubclassOf(typeof(GroundedState)))
-            player.SetAnimation("Falling");
+        if(player.PreviousState.GetType().IsSubclassOf(typeof(InAirState)))
+        {
+            if (player.JumpCount <= 1)
+                player.SetAnimation("Falling");
+            else
+                player.SetAnimation("DFalling");
+        }
         else
-            player.SetAnimationTrigger("Fall");
+            player.SetAnimation("Falling");
     }
     private void CheckAndMoveToGroundedState()
     {
         if (player.IsGrounded())
-            StateFactory.GetGroundedStateBasedOnMovementInputType(player);
+            player.ChangeState(StateFactory.GetGroundedStateBasedOnMovementInputType(player));
+    }
+    protected override void CheckAndMoveToHangingState()
+    {
+        if (!player.DidPalmDetectObject() && palmTouchOnPreviousFrame)
+            player.ChangeState(StateFactory.GetPlayerState(typeof(HangingState), player));
     }
 }

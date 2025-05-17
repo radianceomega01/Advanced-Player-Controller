@@ -10,7 +10,7 @@ public abstract class GroundedState : BaseMovementState
     {
         base.OnEnter();
         player.JumpCount = 0; 
-        player.PlayerInput.Jump.performed += SwitchToJumpingState;
+        player.PlayerInput.Jump.performed += SwitchStateOnJumpInput;
         player.OnMovementInputTypeChanged += MovementInputTypeChanged;
     }
 
@@ -23,14 +23,17 @@ public abstract class GroundedState : BaseMovementState
     public override void OnExit() 
     {
         base.OnExit();
-        player.PlayerInput.Jump.performed -= SwitchToJumpingState;
+        player.PlayerInput.Jump.performed -= SwitchStateOnJumpInput;
         player.OnMovementInputTypeChanged -= MovementInputTypeChanged;
     }
-    protected virtual void MovementInputTypeChanged() => StateFactory.GetGroundedStateBasedOnMovementInputType(player);
+    protected virtual void MovementInputTypeChanged() => player.ChangeState(StateFactory.GetGroundedStateBasedOnMovementInputType(player));
 
-    private void SwitchToJumpingState(InputAction.CallbackContext ctx)
+    private void SwitchStateOnJumpInput(InputAction.CallbackContext ctx)
     {
-        player.ChangeState(StateFactory.GetPlayerState(typeof(JumpedState), player));
+        if (player.DidDetectAVaultableObject() )
+            player.ChangeState(StateFactory.GetPlayerState(typeof(VaultingState), player));
+        else
+            player.ChangeState(StateFactory.GetPlayerState(typeof(JumpedState), player));
     }
 
     protected void SwitchToSlidingState(InputAction.CallbackContext ctx)

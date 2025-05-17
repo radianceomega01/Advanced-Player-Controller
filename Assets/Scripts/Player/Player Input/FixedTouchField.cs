@@ -18,12 +18,12 @@ public class FixedTouchField : MonoBehaviour
         {
             touchDist = pointerEventData.position - pointerOld;
             pointerOld = pointerEventData.position;
+            inputEventSO.LookAroundEvent.Invoke(touchDist);
         }
         else
         {
             touchDist = Vector2.zero;
         }
-        inputEventSO.LookAroundEvent.Invoke(touchDist);
     }
 
     public void OnPointerDown(BaseEventData eventData)

@@ -23,14 +23,14 @@ public static class StateFactory
         Debug.Log(newState);
         return newState;
     }
-    public static void GetGroundedStateBasedOnMovementInputType(PlayerMovement player)
+    public static BaseMovementState GetGroundedStateBasedOnMovementInputType(PlayerMovement player)
     {
         if (player.MovementInputType == MovementInputType.Sprinting)
-            player.ChangeState(StateFactory.GetPlayerState(typeof(RunningState), player));
+            return GetPlayerState(typeof(RunningState), player);
         else if (player.MovementInputType == MovementInputType.Moving)
-            player.ChangeState(StateFactory.GetPlayerState(typeof(WalkingState), player));
+            return GetPlayerState(typeof(WalkingState), player);
         else
-            player.ChangeState(StateFactory.GetPlayerState(typeof(IdleState), player));
+            return GetPlayerState(typeof(IdleState), player);
     }
 
 }

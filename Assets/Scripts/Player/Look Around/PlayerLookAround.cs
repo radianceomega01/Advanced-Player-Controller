@@ -8,23 +8,31 @@ public class PlayerLookAround : MonoBehaviour
     [SerializeField] float playerRotDuration = 0.5f;
 
     private float elapsedTime = 0f;
+    private bool rotationLocked = false;
     void Awake()
     {
         inputEventSO.CameraRotationEvent.AddListener(OnCameraRotationReceived);
+        inputEventSO.PlayerRotationLockToggleEvent.AddListener(OnPlayerRotationLockToggle);
     }
     private void Start()
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;
+        //Application.targetFrameRate = 60;
     }
 
     private void OnDestroy()
     {
         inputEventSO.CameraRotationEvent.RemoveListener(OnCameraRotationReceived);
+        inputEventSO.PlayerRotationLockToggleEvent.RemoveListener(OnPlayerRotationLockToggle);
+    }
+    private void OnPlayerRotationLockToggle(bool value)
+    {
+        rotationLocked = value;
     }
     private void OnCameraRotationReceived(Vector3 cameraRotation)
     {
-        HandlePlayerRotation(cameraRotation);
+        if(!rotationLocked)
+            HandlePlayerRotation(cameraRotation);
     }
 
     private void HandlePlayerRotation(Vector3 cameraRotation)

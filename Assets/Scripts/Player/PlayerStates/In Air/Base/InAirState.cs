@@ -4,11 +4,17 @@ using UnityEngine.InputSystem;
 
 public abstract class InAirState : BaseMovementState
 {
+    protected bool isFirstFrame;
+    protected bool palmTouchOnPreviousFrame;
+
     public InAirState(PlayerMovement player) : base(player) { }
+
+    protected abstract void CheckAndMoveToHangingState();
 
     public override void OnEnter() 
     {
         base.OnEnter();
+        isFirstFrame = true;
         player.PlayerInput.Jump.performed += SwitchToJumpingState;
     }
 
@@ -22,6 +28,12 @@ public abstract class InAirState : BaseMovementState
     {
         base.Process();
         player.VerticalVelocity += player.gravity * Time.deltaTime;
+    }
+
+    public override void LateProcess()
+    {
+        base.LateProcess();
+        palmTouchOnPreviousFrame = player.DidPalmDetectObject();
     }
 
     public override void OnExit() 

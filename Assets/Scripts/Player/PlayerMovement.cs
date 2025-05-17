@@ -8,7 +8,10 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] InputEventsSO inputEventSO;
+    [SerializeField] Transform rigTransform;
     [SerializeField] Transform footTransform;
+    [SerializeField] Transform kneeTransform;
+    [SerializeField] Transform hangTransform;
 
     //public values to be shared with player states
     [SerializeField] public float walkingSpeed = 1.75f;
@@ -17,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public float slidingSpeedAddition = 3f;
     [SerializeField] public float slidingDeAccelerationMultiplier = 0.3f;
     [SerializeField] public float gravity = -15f;
+    [SerializeField] public float minVaultableHeight = 1f;
+    [SerializeField] public float MaxVaultableHeight = 4f;
+    [SerializeField] public float vaultTimeInSecs = 1f;
 
     /*[Header("Colliders")]
     [SerializeField] Collider[] playerColliders;*/
@@ -24,7 +30,6 @@ public class PlayerMovement : MonoBehaviour
 
     PlayerActions playerActions;
     BaseMovementState state;
-    BaseMovementState previousState;
     Animator animator;
     Vector2 moveInput;
     Vector3 playerForwardDir;
@@ -32,15 +37,18 @@ public class PlayerMovement : MonoBehaviour
     float sprintPressTime;
     float overlapSphereRadius;
     MovementInputType previousType;
+    Vector3 hangHalfExtents;
+    Transform currentLookAtTransform;
 
-    public const float JOYSTICK_AXIS_VALUE_ON_MAX_X_AND_Y = 0.5f;
+    private const float JOYSTICK_AXIS_VALUE_ON_MAX_X_AND_Y = 0.5f;
     public PlayerActions.PlayerInputActions PlayerInput { get; private set; }
     public CharacterController CharacterController { get; private set; }
     public int JumpCount { get; set; }
     public float VerticalVelocity { get; set; }
-    public float PreviousYPos { get; private set; }
+    public Vector3 PreviousPos { get; private set; }
     public MovementInputType MovementInputType { get; private set; }
     public Vector3 MovementDir { get; private set; }
+    public BaseMovementState PreviousState{ get; private set; }
 
     public event Action OnAnimComplete;
     public event Action OnMovementInputTypeChanged;
@@ -52,21 +60,31 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         CharacterController = GetComponent<CharacterController>();
         layerMask = 1 << LayerMask.NameToLayer("Ground");
-        overlapSphereRadius = CharacterController.radius - 0.1f;
     }
 
     private void OnEnable()
     {
         playerActions.Enable();
+        inputEventSO.ChangePlayerLookAtEvent.AddListener(ChangeLookAtTransform);
+    }
+    private void OnDisable()
+    {
+        playerActions.Disable();
+        inputEventSO.ChangePlayerLookAtEvent.RemoveListener(ChangeLookAtTransform);
     }
 
     private void Start()
     {
+        overlapSphereRadius = CharacterController.radius - 0.1f;
+        hangHalfExtents = new Vector3(CharacterController.radius, 0.1f, CharacterController.radius);
+
+        ChangeLookAtTransform(LookAtType.Player);
         ChangeState(StateFactory.GetPlayerState(typeof(IdleState), this));
     }
     private void FixedUpdate()
     {
         state.PhysicsProcess();
+        inputEventSO.PlayerPositionEvent.Invoke(new Vector3(transform.position.x, currentLookAtTransform.position.y, transform.position.z));
     }
 
     void Update()
@@ -74,17 +92,16 @@ public class PlayerMovement : MonoBehaviour
         GetPlayerMovInput();
         SetPlayerMovementType();
         state.Process();
-        inputEventSO.PlayerPositionEvent.Invoke(transform.position);
     }
 
     private void LateUpdate()
     {
-        PreviousYPos = transform.position.y;
+        PreviousPos = transform.position;
         state.LateProcess();
     }
     public void ChangeState(BaseMovementState newState)
     {
-        previousState = state;
+        PreviousState = state;
         if(state != null)
             state.OnExit();
         state = newState;
@@ -111,8 +128,8 @@ public class PlayerMovement : MonoBehaviour
         moveInput = playerActions.PlayerInput.Move.ReadValue<Vector2>();
         sprintPressTime = playerActions.PlayerInput.Sprint.ReadValue<float>();
 
-        SetAnimation("InpX", moveInput.x);
-        SetAnimation("InpY", moveInput.y);
+        SetAnimationWithFloatVal("InpX", moveInput.x);
+        SetAnimationWithFloatVal("InpY", moveInput.y);
 
         if (IsSprintingTypeInput())
             MovementInputType = MovementInputType.Sprinting;
@@ -144,6 +161,41 @@ public class PlayerMovement : MonoBehaviour
     {
         return Physics.CheckSphere(footTransform.position, overlapSphereRadius, layerMask);
     }
+    public bool DidPalmDetectObject()
+    {
+        return Physics.CheckBox(hangTransform.position, hangHalfExtents, Quaternion.identity, layerMask);
+    }
+    public bool DidDetectAVaultableObject()
+    {
+        Collider collider = GetVaultableObjectColldier();
+        if (collider == null || 
+            collider.bounds.size.y < minVaultableHeight ||
+            collider.bounds.size.y > MaxVaultableHeight)
+            return false;
+
+        return true;
+    }
+    public float GetVaultableObjectHeight()
+    {
+        Collider collider = GetVaultableObjectColldier();
+        if(collider == null)
+            return 0f;
+        return collider.bounds.size.y;
+    }
+    private Collider GetVaultableObjectColldier()
+    {
+        Collider[] colliders = Physics.OverlapSphere(kneeTransform.position + transform.forward * CharacterController.radius, 0.2f, layerMask);
+        if (colliders.Length > 0)
+            return colliders[0];
+        else
+            return null;
+    }
+
+    private void ChangeLookAtTransform(LookAtType lookAtType)
+    {
+        currentLookAtTransform = lookAtType == LookAtType.Player? transform: rigTransform;
+    }
+
     public float GetMovementSpeed()
     {
         if (MovementInputType == MovementInputType.Sprinting)
@@ -153,38 +205,19 @@ public class PlayerMovement : MonoBehaviour
         else
             return 0f;
     }
-    private RaycastHit RayCastHitToBottom()
+
+    public void SetAnimation(string name, float fadeDuration = 0.2f)
     {
-        RaycastHit hitInfo;
-        Physics.Raycast(footTransform.position, Vector3.down, out hitInfo, 10f);
-        return hitInfo;
+        animator.Play(name);
+        if(fadeDuration > 0)
+            animator.CrossFade(name, fadeDuration);
     }
+    public InputEventsSO GetInputSO() =>inputEventSO;
 
-    public BaseMovementState GetPreviousState() => previousState;
-
-    public void SetAnimation(string name) => animator.Play(name);
-    public void SetAnimationTrigger(string name) => animator.SetTrigger(name);
-    public void ResetAnimationTrigger(string name) => animator.ResetTrigger(name);
-    public void SetAnimation(string name, float value) =>animator.SetFloat(name, value);
+    private void SetAnimationWithFloatVal(string name, float value) =>animator.SetFloat(name, value);
 
     public void AnimComplete() => OnAnimComplete?.Invoke();
 
-    private void OnDisable()
-    {
-        playerActions.Disable();
-    }
-    private void OnDrawGizmosSelected()
-    {
-        Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
-        Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
-
-        if (IsGrounded()) Gizmos.color = transparentGreen;
-        else Gizmos.color = transparentRed;
-
-        // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-        Gizmos.DrawSphere(footTransform.position - Vector3.up * overlapSphereRadius,
-            overlapSphereRadius);
-    }
 }
 
 public enum MovementInputType
@@ -192,4 +225,9 @@ public enum MovementInputType
     Idle,
     Moving,
     Sprinting
+}
+public enum LookAtType
+{
+    Player,
+    Rig
 }

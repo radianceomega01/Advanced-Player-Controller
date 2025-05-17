@@ -6,6 +6,7 @@ using UnityEngine;
 public class CameraLookAt : MonoBehaviour
 {
     [SerializeField] InputEventsSO inputEventSO;
+    [SerializeField] float camYOffsetFromPlayer = 1.7f;
     [SerializeField] float camRotationSpeedX = 13f;
     [SerializeField] float camRotationSpeedY = 8f;
     [SerializeField] float camMaxLookUpAngle = 60f;
@@ -13,7 +14,6 @@ public class CameraLookAt : MonoBehaviour
 
     float camAngularIncrementY;
     float camAngularIncrementX;
-    private float camYOffsetFromPlayer = 1.7f;
 
     void Awake()
     {

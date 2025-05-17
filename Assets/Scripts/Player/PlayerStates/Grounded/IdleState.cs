@@ -12,19 +12,15 @@ public class IdleState : GroundedState
     {
         base.OnEnter();
 
-        if (player.GetPreviousState() != null && player.GetPreviousState().GetType() == typeof(FallingState))
-        {
-            player.SetAnimation("Landing");
-        }
         //player.PlayerInput.CrouchSlide.performed += SwitchToCrouchingState;
         player.SetAnimation("Idle");
-        player.SetVerticalVelocityWithHorizontalVelocity(player.walkingSpeed);
+        player.VerticalVelocity = 0f;
 
     }
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
-        player.CharacterController.Move(Time.fixedDeltaTime * Vector3.up * player.VerticalVelocity);
+        player.CharacterController.Move(Time.fixedDeltaTime * Vector3.up * -player.runningSpeed);
     }
 
     public override void OnExit()
