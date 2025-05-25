@@ -2,6 +2,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class VaultingState : BaseMovementState
 {
@@ -14,16 +15,23 @@ public class VaultingState : BaseMovementState
         base.OnEnter();
         player.OnAnimComplete += MoveSlightlyForward;
         player.GetInputSO().PlayerRotationLockToggleEvent.Invoke(true);
-        player.GetInputSO().ChangePlayerLookAtEvent.Invoke(LookAtType.Rig);
 
         float vaultableobjectHeight = player.GetVaultableObjectHeight();
+        player.transform.position +=  Vector3.up * (vaultableobjectHeight);
+        
+        PlayAnim(vaultableobjectHeight);
+
+    }
+    private async void PlayAnim(float vaultableobjectHeight)
+    {
+        await Task.Delay(10);
+        player.ToggleAnimatorRootMotion(true);
         if (vaultableobjectHeight <= player.CharacterController.height)
             player.SetAnimation("StepOver", 0f);
         else
             player.SetAnimation("Vault", 0f);
-
-        player.transform.position +=  Vector3.up * vaultableobjectHeight;
     }
+
     private void MoveSlightlyForward()
     {
         player.transform.DOMove(player.transform.position + player.transform.forward * distanceToMoveForwardOnVault, timeToMoveForwardAfterVault)
@@ -33,7 +41,7 @@ public class VaultingState : BaseMovementState
 
     private void OnVaultComplete()
     {
-        player.GetInputSO().ChangePlayerLookAtEvent.Invoke(LookAtType.Player);
+        player.ToggleAnimatorRootMotion(false);
         player.ChangeState(StateFactory.GetGroundedStateBasedOnMovementInputType(player));
     }
 

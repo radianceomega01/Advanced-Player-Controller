@@ -5,9 +5,9 @@ using UnityEngine.EventSystems;
 
 public class FixedTouchField : MonoBehaviour
 {
-    [SerializeField] InputEventsSO inputEventSO;
+    [SerializeField] ReferencesSO referencesSO;
 
-    private Vector2 touchDist;
+    private Vector2 swipeDistance;
     private Vector2 pointerOld;
     private bool pressed;
     private PointerEventData pointerEventData;
@@ -16,13 +16,14 @@ public class FixedTouchField : MonoBehaviour
     {
         if (pressed)
         {
-            touchDist = pointerEventData.position - pointerOld;
+            swipeDistance = pointerEventData.position - pointerOld;
             pointerOld = pointerEventData.position;
-            inputEventSO.LookAroundEvent.Invoke(touchDist);
+            if(referencesSO != null)
+                referencesSO.SwipeDistance = swipeDistance;
         }
         else
         {
-            touchDist = Vector2.zero;
+            swipeDistance = Vector2.zero;
         }
     }
 

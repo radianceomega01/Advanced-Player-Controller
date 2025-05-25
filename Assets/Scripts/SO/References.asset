@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 406884eb23d7b1242ad7a1e0ed6b8912, type: 3}
-  m_Name: InputEvents
+  m_Script: {fileID: 11500000, guid: 23318bea078c8a34db70879be3bc6944, type: 3}
+  m_Name: References
   m_EditorClassIdentifier: 
-  LookAroundEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  SwipeDistance: {x: 0, y: 0}
+  PlayerPosition: {x: 0, y: 0}
+  CameraRotation: {x: 0, y: 0, z: 0}

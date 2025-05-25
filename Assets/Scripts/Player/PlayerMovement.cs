@@ -7,8 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] InputEventsSO inputEventSO;
-    [SerializeField] Transform rigTransform;
+    [SerializeField] EventsSO inputEventSO;
+    [SerializeField] ReferencesSO referencesSO;
     [SerializeField] Transform footTransform;
     [SerializeField] Transform kneeTransform;
     [SerializeField] Transform hangTransform;
@@ -65,12 +65,10 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         playerActions.Enable();
-        inputEventSO.ChangePlayerLookAtEvent.AddListener(ChangeLookAtTransform);
     }
     private void OnDisable()
     {
         playerActions.Disable();
-        inputEventSO.ChangePlayerLookAtEvent.RemoveListener(ChangeLookAtTransform);
     }
 
     private void Start()
@@ -78,17 +76,17 @@ public class PlayerMovement : MonoBehaviour
         overlapSphereRadius = CharacterController.radius - 0.1f;
         hangHalfExtents = new Vector3(CharacterController.radius, 0.1f, CharacterController.radius);
 
-        ChangeLookAtTransform(LookAtType.Player);
         ChangeState(StateFactory.GetPlayerState(typeof(IdleState), this));
     }
     private void FixedUpdate()
     {
         state.PhysicsProcess();
-        inputEventSO.PlayerPositionEvent.Invoke(new Vector3(transform.position.x, currentLookAtTransform.position.y, transform.position.z));
     }
 
     void Update()
     {
+        if(referencesSO != null)
+            referencesSO.PlayerPosition = transform.position;
         GetPlayerMovInput();
         SetPlayerMovementType();
         state.Process();
@@ -191,11 +189,6 @@ public class PlayerMovement : MonoBehaviour
             return null;
     }
 
-    private void ChangeLookAtTransform(LookAtType lookAtType)
-    {
-        currentLookAtTransform = lookAtType == LookAtType.Player? transform: rigTransform;
-    }
-
     public float GetMovementSpeed()
     {
         if (MovementInputType == MovementInputType.Sprinting)
@@ -212,7 +205,8 @@ public class PlayerMovement : MonoBehaviour
         if(fadeDuration > 0)
             animator.CrossFade(name, fadeDuration);
     }
-    public InputEventsSO GetInputSO() =>inputEventSO;
+    public EventsSO GetInputSO() =>inputEventSO;
+    public void ToggleAnimatorRootMotion(bool value) => animator.applyRootMotion = value;
 
     private void SetAnimationWithFloatVal(string name, float value) =>animator.SetFloat(name, value);
 
@@ -225,9 +219,4 @@ public enum MovementInputType
     Idle,
     Moving,
     Sprinting
-}
-public enum LookAtType
-{
-    Player,
-    Rig
 }

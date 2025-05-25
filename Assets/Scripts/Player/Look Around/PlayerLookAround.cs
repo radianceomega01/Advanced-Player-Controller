@@ -4,35 +4,41 @@ using UnityEngine;
 
 public class PlayerLookAround : MonoBehaviour
 {
-    [SerializeField] InputEventsSO inputEventSO;
+    [SerializeField] EventsSO inputEventSO;
+    [SerializeField] ReferencesSO referencesSO;
     [SerializeField] float playerRotDuration = 0.5f;
 
     private float elapsedTime = 0f;
     private bool rotationLocked = false;
     void Awake()
     {
-        inputEventSO.CameraRotationEvent.AddListener(OnCameraRotationReceived);
-        inputEventSO.PlayerRotationLockToggleEvent.AddListener(OnPlayerRotationLockToggle);
+        if (inputEventSO != null)
+        {
+            inputEventSO.PlayerRotationLockToggleEvent.AddListener(OnPlayerRotationLockToggle);
+        }
     }
     private void Start()
     {
         QualitySettings.vSyncCount = 0;
-        //Application.targetFrameRate = 60;
+        Application.targetFrameRate = 60;
     }
 
     private void OnDestroy()
     {
-        inputEventSO.CameraRotationEvent.RemoveListener(OnCameraRotationReceived);
-        inputEventSO.PlayerRotationLockToggleEvent.RemoveListener(OnPlayerRotationLockToggle);
+        if (inputEventSO != null)
+        { 
+            inputEventSO.PlayerRotationLockToggleEvent.RemoveListener(OnPlayerRotationLockToggle);
+        }
     }
     private void OnPlayerRotationLockToggle(bool value)
     {
         rotationLocked = value;
     }
-    private void OnCameraRotationReceived(Vector3 cameraRotation)
+
+    void Update()
     {
-        if(!rotationLocked)
-            HandlePlayerRotation(cameraRotation);
+        if(!rotationLocked && referencesSO != null)
+            HandlePlayerRotation(referencesSO.CameraRotation);
     }
 
     private void HandlePlayerRotation(Vector3 cameraRotation)

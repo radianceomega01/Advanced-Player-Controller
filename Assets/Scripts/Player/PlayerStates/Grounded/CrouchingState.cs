@@ -10,14 +10,4 @@ public class CrouchingState : GroundedState
     {
         base.OnEnter();
     }
-
-    public override void PhysicsProcess()
-    {
-
-    }
-
-    public override void Process()
-    {
-
-    }
 }

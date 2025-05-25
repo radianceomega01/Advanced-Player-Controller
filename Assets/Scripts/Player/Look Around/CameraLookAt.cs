@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraLookAt : MonoBehaviour
 {
-    [SerializeField] InputEventsSO inputEventSO;
+    [SerializeField] ReferencesSO referencesSO;
     [SerializeField] float camYOffsetFromPlayer = 1.7f;
     [SerializeField] float camRotationSpeedX = 13f;
     [SerializeField] float camRotationSpeedY = 8f;
@@ -15,25 +15,15 @@ public class CameraLookAt : MonoBehaviour
     float camAngularIncrementY;
     float camAngularIncrementX;
 
-    void Awake()
+    void Update()
     {
-        inputEventSO.LookAroundEvent.AddListener(OnLookAroundReceived);
-        inputEventSO.PlayerPositionEvent.AddListener(OnPlayerPositionReceived);
+        if (referencesSO == null)
+            return;
+        HandleCameraRotation(referencesSO.SwipeDistance);
     }
-
-    private void OnDestroy()
+    void LateUpdate()
     {
-        inputEventSO.LookAroundEvent.RemoveListener(OnLookAroundReceived);
-        inputEventSO.PlayerPositionEvent.RemoveListener(OnPlayerPositionReceived);
-    }
-
-    private void OnLookAroundReceived(Vector2 inp)
-    {
-        HandleCameraRotation(inp);
-    }
-    private void OnPlayerPositionReceived(Vector3 playerPos)
-    {
-        UpdatePos(playerPos);
+        UpdatePos(referencesSO.PlayerPosition);
     }
 
     private void HandleCameraRotation(Vector2 moveDelta)
@@ -54,7 +44,7 @@ public class CameraLookAt : MonoBehaviour
 
         // Orient to match the new angles.
         transform.localEulerAngles = eulerAngles;
-        inputEventSO.CameraRotationEvent.Invoke(eulerAngles);
+        referencesSO.CameraRotation = eulerAngles;
 
         //cameraTarget.Rotate(Vector3.up * Time.deltaTime * rotationSpeedX * -moveDelta.x);
         //cameraTarget.Rotate(Vector3.right * Time.deltaTime * rotationSpeedY * moveDelta.y);

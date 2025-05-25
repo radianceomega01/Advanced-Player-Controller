@@ -20,7 +20,6 @@ public class WalkingState : GroundedState
     public override void PhysicsProcess()
     {
         base.PhysicsProcess();
-
         player.CharacterController.Move(Time.fixedDeltaTime * (player.MovementDir * player.walkingSpeed + Vector3.up * player.VerticalVelocity));
     }
 
