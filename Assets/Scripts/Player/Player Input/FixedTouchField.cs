@@ -18,13 +18,13 @@ public class FixedTouchField : MonoBehaviour
         {
             swipeDistance = pointerEventData.position - pointerOld;
             pointerOld = pointerEventData.position;
-            if(referencesSO != null)
-                referencesSO.SwipeDistance = swipeDistance;
         }
         else
         {
             swipeDistance = Vector2.zero;
         }
+        if(referencesSO != null)
+            referencesSO.SwipeDistance = swipeDistance;
     }
 
     public void OnPointerDown(BaseEventData eventData)

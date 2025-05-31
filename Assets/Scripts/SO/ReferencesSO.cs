@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "References", menuName = "ScriptableObjects/References")]
+[CreateAssetMenu(fileName = "ReferencesSO", menuName = "Scriptable Objects/ReferencesSO")]
 public class ReferencesSO : ScriptableObject
 {
     [HideInInspector] public Vector2 SwipeDistance;

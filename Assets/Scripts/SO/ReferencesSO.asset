@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23318bea078c8a34db70879be3bc6944, type: 3}
-  m_Name: References
+  m_Name: ReferencesSO
   m_EditorClassIdentifier: 
   SwipeDistance: {x: 0, y: 0}
   PlayerPosition: {x: 0, y: 0}

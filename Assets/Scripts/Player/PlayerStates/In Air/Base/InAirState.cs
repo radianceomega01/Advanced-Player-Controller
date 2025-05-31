@@ -9,8 +9,6 @@ public abstract class InAirState : BaseMovementState
 
     public InAirState(PlayerMovement player) : base(player) { }
 
-    protected abstract void CheckAndMoveToHangingState();
-
     public override void OnEnter() 
     {
         base.OnEnter();
@@ -28,12 +26,6 @@ public abstract class InAirState : BaseMovementState
     {
         base.Process();
         player.VerticalVelocity += player.gravity * Time.deltaTime;
-    }
-
-    public override void LateProcess()
-    {
-        base.LateProcess();
-        palmTouchOnPreviousFrame = player.DidPalmDetectObject();
     }
 
     public override void OnExit() 

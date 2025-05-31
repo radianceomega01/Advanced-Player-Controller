@@ -30,8 +30,10 @@ public abstract class GroundedState : BaseMovementState
 
     private void SwitchStateOnJumpInput(InputAction.CallbackContext ctx)
     {
-        if (player.DidDetectAVaultableObject() )
+        if (player.DidDetectAVaultableObject())
+        {
             player.ChangeState(StateFactory.GetPlayerState(typeof(VaultingState), player));
+        }
         else
             player.ChangeState(StateFactory.GetPlayerState(typeof(JumpedState), player));
     }

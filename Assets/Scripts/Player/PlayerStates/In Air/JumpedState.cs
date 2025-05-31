@@ -24,7 +24,6 @@ public class JumpedState : InAirState
         if (!isFirstFrame)
         {
             CheckAndMoveToFallingOrGroundedState();
-            //CheckAndMoveToHangingState();
         }
         else
             isFirstFrame = false;
@@ -42,12 +41,5 @@ public class JumpedState : InAirState
                 player.ChangeState(StateFactory.GetPlayerState(typeof(FallingState), player));
             }
         }
-    }
-    protected override void CheckAndMoveToHangingState()
-    {
-        if (!player.DidPalmDetectObject() && palmTouchOnPreviousFrame)
-            player.ChangeState(StateFactory.GetPlayerState(typeof(HangingState), player));
-        else if (player.DidPalmDetectObject() && !palmTouchOnPreviousFrame)
-            player.ChangeState(StateFactory.GetPlayerState(typeof(HangingState), player));
     }
 }

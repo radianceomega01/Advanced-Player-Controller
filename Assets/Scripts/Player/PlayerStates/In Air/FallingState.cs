@@ -13,12 +13,6 @@ public class FallingState : InAirState
     {
         base.PhysicsProcess();
         CheckAndMoveToGroundedState();
-        // if (!isFirstFrame)
-        // {
-        //     CheckAndMoveToHangingState();
-        // }
-        // else
-        //     isFirstFrame = false;
     }
 
     private void TransitionToFalling()
@@ -37,10 +31,5 @@ public class FallingState : InAirState
     {
         if (player.IsGrounded())
             player.ChangeState(StateFactory.GetGroundedStateBasedOnMovementInputType(player));
-    }
-    protected override void CheckAndMoveToHangingState()
-    {
-        if (!player.DidPalmDetectObject() && palmTouchOnPreviousFrame)
-            player.ChangeState(StateFactory.GetPlayerState(typeof(HangingState), player));
     }
 }

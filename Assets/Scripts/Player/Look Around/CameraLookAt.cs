@@ -20,9 +20,12 @@ public class CameraLookAt : MonoBehaviour
         if (referencesSO == null)
             return;
         HandleCameraRotation(referencesSO.SwipeDistance);
+        
     }
     void LateUpdate()
     {
+        if (referencesSO == null)
+            return;
         UpdatePos(referencesSO.PlayerPosition);
     }
 

@@ -321,13 +321,13 @@ AnimatorStateMachine:
     m_Position: {x: 790, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7081122476433370510}
-    m_Position: {x: 90, y: 140, z: 0}
+    m_Position: {x: 210, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7636176657801527039}
     m_Position: {x: 330, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -214866351156686068}
-    m_Position: {x: 220, y: 200, z: 0}
+    m_Position: {x: 90, y: 140, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -358,7 +358,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 6cb598c6e47894541908d0bf478e3056, type: 2}
+  m_Motion: {fileID: 7400000, guid: a1747850013f4b34f93a18de0402ad57, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -684,7 +684,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Vault
+  m_Name: LargeVault
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []

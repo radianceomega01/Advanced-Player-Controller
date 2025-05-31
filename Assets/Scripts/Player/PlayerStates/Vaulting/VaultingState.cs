@@ -6,48 +6,62 @@ using System.Threading.Tasks;
 
 public class VaultingState : BaseMovementState
 {
-    float distanceToMoveForwardOnVault = 0.5f;
-    float timeToMoveForwardAfterVault = 0.25f;
     public VaultingState(PlayerMovement player) : base(player) { }
 
     public override void OnEnter()
     {
         base.OnEnter();
-        player.OnAnimComplete += MoveSlightlyForward;
+        player.OnAnimComplete += OnVaultComplete;
         player.GetInputSO().PlayerRotationLockToggleEvent.Invoke(true);
 
-        float vaultableobjectHeight = player.GetVaultableObjectHeight();
-        player.transform.position +=  Vector3.up * (vaultableobjectHeight);
-        
-        PlayAnim(vaultableobjectHeight);
+        //player.transform.position +=  Vector3.up * (vaultableobjectHeight);
+
+        PlayAnim(player.InstantaneousVaultHeight);
 
     }
-    private async void PlayAnim(float vaultableobjectHeight)
+    private void PlayAnim(float vaultableobjectHeight)
     {
-        await Task.Delay(10);
         player.ToggleAnimatorRootMotion(true);
-        if (vaultableobjectHeight <= player.CharacterController.height)
-            player.SetAnimation("StepOver", 0f);
+        player.ToggleCharacterController(false);
+
+        if (player.stepOverData.CanVault(vaultableobjectHeight))
+        {
+            player.SetAnimation("StepOver", 0);
+            player.SetAnimationMatchTarget(player.stepOverData.AvatarTarget, player.stepOverData.weight,
+                player.stepOverData.startNormalizedTime, player.stepOverData.targetNormalizedTime);
+        }
+        else if (player.smallVaultData.CanVault(vaultableobjectHeight))
+        {
+            player.SetAnimation("SmallVault", 0);
+            player.SetAnimationMatchTarget(player.smallVaultData.AvatarTarget, player.smallVaultData.weight,
+                player.smallVaultData.startNormalizedTime, player.smallVaultData.targetNormalizedTime);
+        }
         else
-            player.SetAnimation("Vault", 0f);
+        {
+            player.SetAnimation("LargeVault", 0);
+            player.SetAnimationMatchTarget(player.largeVaultData.AvatarTarget, player.largeVaultData.weight,
+                player.largeVaultData.startNormalizedTime, player.largeVaultData.targetNormalizedTime);
+        }
     }
 
-    private void MoveSlightlyForward()
-    {
-        player.transform.DOMove(player.transform.position + player.transform.forward * distanceToMoveForwardOnVault, timeToMoveForwardAfterVault)
-            .OnComplete(OnVaultComplete);
-        player.GetInputSO().PlayerRotationLockToggleEvent.Invoke(false);    
-    }
+    // private void MoveSlightlyForward()
+    // {
+    //     player.transform.DOMove(player.transform.position + player.transform.forward * distanceToMoveForwardOnVault, timeToMoveForwardAfterVault)
+    //         .OnComplete(OnVaultComplete);
+    //     player.GetInputSO().PlayerRotationLockToggleEvent.Invoke(false);    
+    // }
 
     private void OnVaultComplete()
     {
         player.ToggleAnimatorRootMotion(false);
+        player.ToggleCharacterController(true);
         player.ChangeState(StateFactory.GetGroundedStateBasedOnMovementInputType(player));
     }
 
     public override void OnExit()
     {
         base.OnExit();
-        player.OnAnimComplete -= MoveSlightlyForward;
+        player.GetInputSO().PlayerRotationLockToggleEvent.Invoke(false);
+        player.OnAnimComplete -= OnVaultComplete;
     }
 }

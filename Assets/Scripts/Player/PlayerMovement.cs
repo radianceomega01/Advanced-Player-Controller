@@ -11,7 +11,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] ReferencesSO referencesSO;
     [SerializeField] Transform footTransform;
     [SerializeField] Transform kneeTransform;
-    [SerializeField] Transform hangTransform;
 
     //public values to be shared with player states
     [SerializeField] public float walkingSpeed = 1.75f;
@@ -20,9 +19,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public float slidingSpeedAddition = 3f;
     [SerializeField] public float slidingDeAccelerationMultiplier = 0.3f;
     [SerializeField] public float gravity = -15f;
-    [SerializeField] public float minVaultableHeight = 1f;
-    [SerializeField] public float MaxVaultableHeight = 4f;
-    [SerializeField] public float vaultTimeInSecs = 1f;
+    [SerializeField] public VaultDataSO stepOverData;
+    [SerializeField] public VaultDataSO smallVaultData;
+    [SerializeField] public VaultDataSO largeVaultData;
 
     /*[Header("Colliders")]
     [SerializeField] Collider[] playerColliders;*/
@@ -39,12 +38,14 @@ public class PlayerMovement : MonoBehaviour
     MovementInputType previousType;
     Vector3 hangHalfExtents;
     Transform currentLookAtTransform;
+    Vector3 instantaneousVaultHitPoint;
 
     private const float JOYSTICK_AXIS_VALUE_ON_MAX_X_AND_Y = 0.5f;
     public PlayerActions.PlayerInputActions PlayerInput { get; private set; }
     public CharacterController CharacterController { get; private set; }
     public int JumpCount { get; set; }
     public float VerticalVelocity { get; set; }
+    public float InstantaneousVaultHeight{ get; set; }
     public Vector3 PreviousPos { get; private set; }
     public MovementInputType MovementInputType { get; private set; }
     public Vector3 MovementDir { get; private set; }
@@ -159,34 +160,39 @@ public class PlayerMovement : MonoBehaviour
     {
         return Physics.CheckSphere(footTransform.position, overlapSphereRadius, layerMask);
     }
-    public bool DidPalmDetectObject()
-    {
-        return Physics.CheckBox(hangTransform.position, hangHalfExtents, Quaternion.identity, layerMask);
-    }
     public bool DidDetectAVaultableObject()
     {
-        Collider collider = GetVaultableObjectColldier();
-        if (collider == null || 
-            collider.bounds.size.y < minVaultableHeight ||
-            collider.bounds.size.y > MaxVaultableHeight)
-            return false;
-
-        return true;
+        RaycastHit touchingRaycastHit;
+        if (IsTouchingAnObject(out touchingRaycastHit))
+        {
+            if (IsAVaultableObject())
+            {
+                //transform.LookAt(touchingRaycastHit.normal);
+                return true;
+            }
+        }
+        InstantaneousVaultHeight = 0f;
+        return false;
     }
-    public float GetVaultableObjectHeight()
+    private bool IsTouchingAnObject(out RaycastHit hit)
     {
-        Collider collider = GetVaultableObjectColldier();
-        if(collider == null)
-            return 0f;
-        return collider.bounds.size.y;
+        return Physics.Raycast(kneeTransform.position, transform.forward, out hit, 0.5f, layerMask);
     }
-    private Collider GetVaultableObjectColldier()
+    private bool IsAVaultableObject()
     {
-        Collider[] colliders = Physics.OverlapSphere(kneeTransform.position + transform.forward * CharacterController.radius, 0.2f, layerMask);
-        if (colliders.Length > 0)
-            return colliders[0];
-        else
-            return null;
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + (transform.forward * (CharacterController.radius + 0.2f)) + (transform.up * 5f), Vector3.down, out hit, 5f, layerMask))
+        {
+            InstantaneousVaultHeight = hit.point.y - transform.position.y;
+            Debug.DrawRay(hit.point, Vector3.up, Color.blue);
+            if (InstantaneousVaultHeight >= stepOverData.MinHeight && InstantaneousVaultHeight <= largeVaultData.MaxHeight)
+            {
+                instantaneousVaultHitPoint = hit.point;
+                return true;
+            }
+        }
+        InstantaneousVaultHeight = 0f;
+        return false;
     }
 
     public float GetMovementSpeed()
@@ -199,14 +205,27 @@ public class PlayerMovement : MonoBehaviour
             return 0f;
     }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(instantaneousVaultHitPoint, 0.25f);
+    }
+
     public void SetAnimation(string name, float fadeDuration = 0.2f)
     {
         animator.Play(name);
-        if(fadeDuration > 0)
-            animator.CrossFade(name, fadeDuration);
+        if (fadeDuration > 0)
+            animator.CrossFadeInFixedTime(name, fadeDuration);
     }
-    public EventsSO GetInputSO() =>inputEventSO;
+
+    public void SetAnimationMatchTarget(AvatarTarget targetBodyPart,
+        Vector3 weight, float startNormalizedTime, float targetNormalizedTime)
+    {
+        animator.MatchTarget(instantaneousVaultHitPoint, transform.rotation, targetBodyPart, new MatchTargetWeightMask(weight, 0), startNormalizedTime, targetNormalizedTime);
+    }
+    public EventsSO GetInputSO() => inputEventSO;
     public void ToggleAnimatorRootMotion(bool value) => animator.applyRootMotion = value;
+    public void ToggleCharacterController(bool value) => CharacterController.enabled = value;
 
     private void SetAnimationWithFloatVal(string name, float value) =>animator.SetFloat(name, value);
 
