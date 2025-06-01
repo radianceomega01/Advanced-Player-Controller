@@ -34,7 +34,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: StepOver
-  m_Speed: 1.5
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -46,7 +46,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 42aa74285b95cab4eb1555939a18b5d3, type: 2}
+  m_Motion: {fileID: 7400000, guid: c14fe383211987840a2bfd8ece4fe707, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -74,10 +74,10 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 2f956140ac233c04384f89955db4337f, type: 2}
   m_Tag: 
-  m_SpeedParameter: 
+  m_SpeedParameter: InpX
   m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_CycleOffsetParameter: InpX
+  m_TimeParameter: InpX
 --- !u!1102 &-5347633926217640185
 AnimatorState:
   serializedVersion: 6
@@ -697,7 +697,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d4cbc5c6edb6fbb42b44a3bfa74fa8de, type: 2}
+  m_Motion: {fileID: 7400000, guid: 27091119890bd684db1fb26fef2e1dc7, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

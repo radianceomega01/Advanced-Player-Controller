@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: StepOverDataSO
   m_EditorClassIdentifier: 
   MinHeight: 0.25
-  MaxHeight: 1
+  MaxHeight: 1.1
   AvatarTarget: 3
-  startNormalizedTime: 0.3
-  targetNormalizedTime: 0.65
+  startNormalizedTime: 0.01
+  targetNormalizedTime: 0.4
+  weight: {x: 0, y: 1, z: 1}

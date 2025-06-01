@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3d893733ec20b43b43afec0b956067, type: 3}
   m_Name: LargeVaultDataSO
   m_EditorClassIdentifier: 
-  MinHeight: 2
-  MaxHeight: 3
+  MinHeight: 2.1
+  MaxHeight: 3.4
   AvatarTarget: 4
-  startNormalizedTime: 0.25
-  targetNormalizedTime: 0.55
+  startNormalizedTime: 0.01
+  targetNormalizedTime: 0.35
+  weight: {x: 0, y: 1, z: 1}

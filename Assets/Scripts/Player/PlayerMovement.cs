@@ -165,9 +165,10 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit touchingRaycastHit;
         if (IsTouchingAnObject(out touchingRaycastHit))
         {
-            if (IsAVaultableObject())
+            if (IsAVaultableObject(out float hitPointY))
             {
                 //transform.LookAt(touchingRaycastHit.normal);
+                instantaneousVaultHitPoint = new Vector3(touchingRaycastHit.point.x, hitPointY, touchingRaycastHit.point.z);
                 return true;
             }
         }
@@ -176,23 +177,28 @@ public class PlayerMovement : MonoBehaviour
     }
     private bool IsTouchingAnObject(out RaycastHit hit)
     {
-        return Physics.Raycast(kneeTransform.position, transform.forward, out hit, 0.5f, layerMask);
+        return Physics.Raycast(kneeTransform.position, transform.forward, out hit, 1f, layerMask);
     }
-    private bool IsAVaultableObject()
+    private bool IsAVaultableObject(out float hitPointY)
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + (transform.forward * (CharacterController.radius + 0.2f)) + (transform.up * 5f), Vector3.down, out hit, 5f, layerMask))
+        if (Physics.Raycast(transform.position + (transform.forward * (CharacterController.radius + 1f)) + (transform.up * 10f), Vector3.down, out hit, 10f, layerMask))
         {
             InstantaneousVaultHeight = hit.point.y - transform.position.y;
             Debug.DrawRay(hit.point, Vector3.up, Color.blue);
             if (InstantaneousVaultHeight >= stepOverData.MinHeight && InstantaneousVaultHeight <= largeVaultData.MaxHeight)
             {
-                instantaneousVaultHitPoint = hit.point;
+                hitPointY = hit.point.y;
                 return true;
             }
         }
         InstantaneousVaultHeight = 0f;
+        hitPointY = 0f;
         return false;
+    }
+    public void ModifyVaultPointOnZAxis(float zOffset)
+    {
+        instantaneousVaultHitPoint += transform.forward * zOffset;
     }
 
     public float GetMovementSpeed()
@@ -203,12 +209,6 @@ public class PlayerMovement : MonoBehaviour
             return walkingSpeed;
         else
             return 0f;
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(instantaneousVaultHitPoint, 0.25f);
     }
 
     public void SetAnimation(string name, float fadeDuration = 0.2f)

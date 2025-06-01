@@ -14,8 +14,6 @@ public class VaultingState : BaseMovementState
         player.OnAnimComplete += OnVaultComplete;
         player.GetInputSO().PlayerRotationLockToggleEvent.Invoke(true);
 
-        //player.transform.position +=  Vector3.up * (vaultableobjectHeight);
-
         PlayAnim(player.InstantaneousVaultHeight);
 
     }
@@ -26,30 +24,30 @@ public class VaultingState : BaseMovementState
 
         if (player.stepOverData.CanVault(vaultableobjectHeight))
         {
+            player.ModifyVaultPointOnZAxis(0.15f);
             player.SetAnimation("StepOver", 0);
-            player.SetAnimationMatchTarget(player.stepOverData.AvatarTarget, player.stepOverData.weight,
-                player.stepOverData.startNormalizedTime, player.stepOverData.targetNormalizedTime);
+            SetAnimationMatchTarget(player.stepOverData);
         }
         else if (player.smallVaultData.CanVault(vaultableobjectHeight))
         {
+            player.ModifyVaultPointOnZAxis(-0.2f);
             player.SetAnimation("SmallVault", 0);
-            player.SetAnimationMatchTarget(player.smallVaultData.AvatarTarget, player.smallVaultData.weight,
-                player.smallVaultData.startNormalizedTime, player.smallVaultData.targetNormalizedTime);
+            SetAnimationMatchTarget(player.smallVaultData);
         }
         else
         {
+            player.ModifyVaultPointOnZAxis(-0.3f);
             player.SetAnimation("LargeVault", 0);
-            player.SetAnimationMatchTarget(player.largeVaultData.AvatarTarget, player.largeVaultData.weight,
-                player.largeVaultData.startNormalizedTime, player.largeVaultData.targetNormalizedTime);
+            SetAnimationMatchTarget(player.largeVaultData);
         }
     }
 
-    // private void MoveSlightlyForward()
-    // {
-    //     player.transform.DOMove(player.transform.position + player.transform.forward * distanceToMoveForwardOnVault, timeToMoveForwardAfterVault)
-    //         .OnComplete(OnVaultComplete);
-    //     player.GetInputSO().PlayerRotationLockToggleEvent.Invoke(false);    
-    // }
+    private async void SetAnimationMatchTarget(VaultDataSO playerVaultData)
+    {
+        await Task.Delay(10); // Ensure the animation is ready to match target
+        player.SetAnimationMatchTarget(playerVaultData.AvatarTarget, playerVaultData.weight,
+                playerVaultData.startNormalizedTime, playerVaultData.targetNormalizedTime);
+    }
 
     private void OnVaultComplete()
     {
