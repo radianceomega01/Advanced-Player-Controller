@@ -25,19 +25,19 @@ public class VaultingState : BaseMovementState
         if (player.stepOverData.CanVault(vaultableobjectHeight))
         {
             player.ModifyVaultPointOnZAxis(0.15f);
-            player.SetAnimation("StepOver", 0);
+            player.SetAnimation(NamingUtility.StepOver, 0);
             SetAnimationMatchTarget(player.stepOverData);
         }
         else if (player.smallVaultData.CanVault(vaultableobjectHeight))
         {
-            player.ModifyVaultPointOnZAxis(-0.2f);
-            player.SetAnimation("SmallVault", 0);
+            player.ModifyVaultPointOnZAxis(-0.23f);
+            player.SetAnimation(NamingUtility.SmallVault, 0);
             SetAnimationMatchTarget(player.smallVaultData);
         }
         else
         {
             player.ModifyVaultPointOnZAxis(-0.3f);
-            player.SetAnimation("LargeVault", 0);
+            player.SetAnimation(NamingUtility.LargeVault, 0);
             SetAnimationMatchTarget(player.largeVaultData);
         }
     }

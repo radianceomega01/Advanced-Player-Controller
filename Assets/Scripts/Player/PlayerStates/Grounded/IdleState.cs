@@ -13,7 +13,7 @@ public class IdleState : GroundedState
         base.OnEnter();
 
         //player.PlayerInput.CrouchSlide.performed += SwitchToCrouchingState;
-        player.SetAnimation("Idle");
+        player.SetAnimation(NamingUtility.Idle);
         player.VerticalVelocity = 0f;
 
     }

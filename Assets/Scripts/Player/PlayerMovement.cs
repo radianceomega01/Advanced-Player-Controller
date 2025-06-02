@@ -37,7 +37,6 @@ public class PlayerMovement : MonoBehaviour
     float overlapSphereRadius;
     MovementInputType previousType;
     Vector3 hangHalfExtents;
-    Transform currentLookAtTransform;
     Vector3 instantaneousVaultHitPoint;
 
     private const float JOYSTICK_AXIS_VALUE_ON_MAX_X_AND_Y = 0.5f;
@@ -60,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
         PlayerInput = playerActions.PlayerInput;
         animator = GetComponent<Animator>();
         CharacterController = GetComponent<CharacterController>();
-        layerMask = 1 << LayerMask.NameToLayer("Ground");
+        layerMask = 1 << LayerMask.NameToLayer(NamingUtility.Ground);
     }
 
     private void OnEnable()
@@ -127,8 +126,8 @@ public class PlayerMovement : MonoBehaviour
         moveInput = playerActions.PlayerInput.Move.ReadValue<Vector2>();
         sprintPressTime = playerActions.PlayerInput.Sprint.ReadValue<float>();
 
-        SetAnimationWithFloatVal("InpX", moveInput.x);
-        SetAnimationWithFloatVal("InpY", moveInput.y);
+        SetAnimationWithFloatVal(NamingUtility.InpX, moveInput.x);
+        SetAnimationWithFloatVal(NamingUtility.InpY, moveInput.y);
 
         if (IsSprintingTypeInput())
             MovementInputType = MovementInputType.Sprinting;
@@ -167,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (IsAVaultableObject(out float hitPointY))
             {
-                //transform.LookAt(touchingRaycastHit.normal);
+                transform.rotation = Quaternion.LookRotation(-touchingRaycastHit.normal);
                 instantaneousVaultHitPoint = new Vector3(touchingRaycastHit.point.x, hitPointY, touchingRaycastHit.point.z);
                 return true;
             }

@@ -12,7 +12,7 @@ public class RunningState : GroundedState
 
         player.PlayerInput.CrouchSlide.performed += SwitchToSlidingState;
         player.SetVerticalVelocityWithHorizontalVelocity(player.runningSpeed);
-        player.SetAnimation("Running", player.PreviousState.GetType() == typeof(SlidingState) ? 0.2f: 0.05f);
+        player.SetAnimation(NamingUtility.Running, player.PreviousState.GetType() == typeof(SlidingState) ? 0.2f: 0.05f);
     }
 
     public override void PhysicsProcess()

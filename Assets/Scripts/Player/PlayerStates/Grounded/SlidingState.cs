@@ -15,7 +15,7 @@ public class SlidingState : GroundedState
         player.SetVerticalVelocityWithHorizontalVelocity(currentSpeed);
         //player.SetPlayerCollider(1);
         player.OnAnimComplete += ChangeState;
-        player.SetAnimation("Slide");
+        player.SetAnimation(NamingUtility.Slide);
     }
 
     public override void PhysicsProcess()

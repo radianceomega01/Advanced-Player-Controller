@@ -20,12 +20,12 @@ public class FallingState : InAirState
         if(player.PreviousState.GetType().IsSubclassOf(typeof(InAirState)))
         {
             if (player.JumpCount <= 1)
-                player.SetAnimation("Falling");
+                player.SetAnimation(NamingUtility.Falling);
             else
-                player.SetAnimation("DFalling");
+                player.SetAnimation(NamingUtility.DFalling);
         }
         else
-            player.SetAnimation("Falling");
+            player.SetAnimation(NamingUtility.Falling);
     }
     private void CheckAndMoveToGroundedState()
     {

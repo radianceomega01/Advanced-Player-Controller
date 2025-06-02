@@ -10,9 +10,9 @@ public class JumpedState : InAirState
         base.OnEnter();
         player.JumpCount++;
         if (player.JumpCount == 1)
-            player.SetAnimation("Jumped", 0f);
+            player.SetAnimation(NamingUtility.Jumped, 0f);
         else
-            player.SetAnimation("DJumped");
+            player.SetAnimation(NamingUtility.DJumped);
 
         player.VerticalVelocity = Mathf.Sqrt(-2f * player.jumpHeight * player.gravity); //u = -2gh (initial velocity for jump)
     }
