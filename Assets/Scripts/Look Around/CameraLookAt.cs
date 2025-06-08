@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraLookAt : MonoBehaviour
 {
@@ -14,12 +15,32 @@ public class CameraLookAt : MonoBehaviour
 
     float camAngularIncrementY;
     float camAngularIncrementX;
+    PlayerActions playerActions;
+
+    void Awake()
+    {
+        playerActions = new PlayerActions();
+    }
+    void OnEnable()
+    {
+        playerActions.PlayerInput.Enable();
+    }
+    void OnDisable()
+    {
+        playerActions.PlayerInput.Disable();
+    }
 
     void Update()
     {
+#if UNITY_EDITOR
+        HandleCameraRotation(playerActions.PlayerInput.LookAround.ReadValue<Vector2>());
+#elif UNITY_ANDROID || UNITY_IOS
         if (referencesSO == null)
             return;
         HandleCameraRotation(referencesSO.SwipeDistance);
+#else
+        HandleCameraRotation(playerActions.PlayerInput.LookAround.ReadValue<Vector2>());
+#endif
         
     }
     void LateUpdate()

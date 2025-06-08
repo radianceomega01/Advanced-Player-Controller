@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void GetPlayerMovInput()
     {
-        moveInput = playerActions.PlayerInput.Move.ReadValue<Vector2>();
+        moveInput = PlayerInput.Move.ReadValue<Vector2>();
 
         playerRightDir = transform.right;
         playerRightDir.y = 0;
@@ -123,8 +123,8 @@ public class PlayerMovement : MonoBehaviour
     private void SetPlayerMovementType()
     {
         previousType = MovementInputType;
-        moveInput = playerActions.PlayerInput.Move.ReadValue<Vector2>();
-        sprintPressTime = playerActions.PlayerInput.Sprint.ReadValue<float>();
+        moveInput = PlayerInput.Move.ReadValue<Vector2>();
+        sprintPressTime = PlayerInput.Sprint.ReadValue<float>();
 
         SetAnimationWithFloatVal(NamingUtility.InpX, moveInput.x);
         SetAnimationWithFloatVal(NamingUtility.InpY, moveInput.y);
